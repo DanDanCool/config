@@ -1,6 +1,5 @@
 call plug#begin(stdpath('data'))
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() }}
 Plug 'junegunn/fzf.vim'
 "TODO: write a better plugin for this
 "NOTE: probably reconsider this
@@ -15,15 +14,9 @@ if !has("nvim-0.5")
 endif
 
 "Pretty"
-"Plug 'vim-airline/vim-airline'
-"TODO: delete this
-"Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'DanDanCool/JollyTheme'
-
-"Syntax"
-Plug 'tikhomirov/vim-glsl'
 
 "TODO: move this out when 0.5 becomes stable
 if has("nvim-0.5")
@@ -73,6 +66,7 @@ inoremap <C-Del> <Esc>dei
 
 inoremap <C-S> <Esc>:w<Return>a
 
+"move lines up and down
 inoremap <A-k> <Esc>ddkkp0i
 inoremap <A-j> <Esc>ddp0i
 
@@ -87,8 +81,11 @@ inoremap <C-A> <Esc><S-A>
 inoremap <C-Z> <Esc>ui
 inoremap <C-Y> <Esc><C-R>i
 
+"vimrc
 nnoremap <leader>vimrc :vsplit $MYVIMRC<Return>
 nnoremap <leader>rvimrc :so $MYVIMRC<Return>
+
+"commenting
 nnoremap <C-/> 0i//<Esc>0
 nnoremap // :noh<Return>
 
@@ -97,7 +94,7 @@ augroup autocommands
 	autocmd FileType python :noremap <C-/> 0i#<Esc>0
 	autocmd FileType c,cpp setlocal expandtab
 	autocmd BufWritePre * %s/\s\+$//e
-	autocmd BufWritePost * call tagbar#ForceUpdate() | call lightline#update()
+	autocmd BufWritePost * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd WinNew * silent NERDTreeMirror | silent NERDTreeClose
 augroup END
 
