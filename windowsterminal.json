@@ -1,0 +1,99 @@
+// Windows Terminal 1.5.10271.0
+{
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+
+	// cmd
+    "defaultProfile": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+
+    // If enabled, selections are automatically copied to your clipboard.
+    "copyOnSelect": false,
+
+    // If enabled, formatted data is also copied to your clipboard
+    "copyFormatting": false,
+	
+	"startOnUserLogin": true,
+	"initialRows": 35,
+
+    // profiles
+    "profiles":
+    {
+        "defaults":
+        {
+            // Put settings here that you want to apply to all profiles.
+			"fontFace": "Hack NF",
+			"fontSize": 12,
+			"largePasteWarning": false,
+			"multiLinePasteWarning": false,
+			"startingDirectory": "c:/",
+			"backgroundImage": "C:\\Users\\sunda\\Pictures\\Backgrounds\\vo3zefs9rlo61.jpg",
+			//"backgroundImage": "C:\\Dev\\Anime\\wp3065016-cartoon-unicorns-wallpapers.jpg",
+			"backgroundImageOpacity": 0.1
+        },
+        "list":
+        [
+            {
+                // Make changes here to the powershell.exe profile.
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "Windows PowerShell",
+                "commandline": "powershell.exe",
+                "hidden": false
+            },
+            {
+                // Make changes here to the cmd.exe profile.
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "Command Prompt",
+                "commandline": "cmd.exe",
+                "hidden": false
+            },
+            {
+                "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+                "hidden": false,
+                "name": "Azure Cloud Shell",
+                "source": "Windows.Terminal.Azure"
+            }
+        ]
+    },
+
+    // color schemes
+    "schemes": [],
+
+    // keybindings
+    "actions":
+    [
+        // copy paste
+        { "command": {"action": "copy", "singleLine": false }, "keys": "ctrl+shift+c" },
+        { "command": "paste", "keys": "ctrl+shift+v" },
+
+        // search box
+        { "command": "find", "keys": "ctrl+shift+f" },
+
+		// map arrow keys to <CTRL> + hjkl
+
+		// <DOWN>
+		{ "command": { "action": "sendInput", "input": "\u001b[A" }, "keys": "ctrl+k" },
+		// <UP>
+		{ "command": { "action": "sendInput", "input": "\u001b[B" }, "keys": "ctrl+j" },
+		// <LEFT>
+		{ "command": { "action": "sendInput", "input": "\u001b[C" }, "keys": "ctrl+L" },
+		// <RIGHT>
+		{ "command": { "action": "sendInput", "input": "\u001b[D" }, "keys": "ctrl+h" },
+		
+		// vim insert mode keymaps
+
+		// <CTRL> + W
+		{ "command": { "action": "sendInput", "input": "\u0017" }, "keys": "shift+backspace" },
+		// <CTRL> + N
+		{ "command": { "action": "sendInput", "input": "\u000E" }, "keys": "ctrl+space" },
+		// <CTRL> + P
+		{ "command": { "action": "sendInput", "input": "\u0010" }, "keys": "ctrl+shift+space" },
+		// <ESC> + O
+		{ "command": {"action": "sendInput", "input": "\u001b\u004f"}, "keys": "ctrl+enter"},
+		// <ESC> + o
+		{ "command": {"action": "sendInput", "input": "\u001b\u006f"}, "keys": "shift+enter"},
+
+		// remove annoying default bindings
+		{"command": "unbound", "keys": "ctrl+,"},
+		{"command": "unbound", "keys": "ctrl+-"},
+		{"command": "unbound", "keys": "ctrl+="}
+    ]
+}
