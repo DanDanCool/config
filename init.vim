@@ -1,5 +1,6 @@
 call plug#begin(stdpath('data'))
 
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 "TODO: write a better plugin for this
 "NOTE: probably reconsider this
@@ -95,6 +96,7 @@ augroup autocommands
 	autocmd FileType c,cpp setlocal expandtab
 	autocmd BufWritePre * %s/\s\+$//e
 	autocmd BufWritePost * silent! call tagbar#ForceUpdate() | call lightline#update()
+	autocmd BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd WinNew * silent NERDTreeMirror | silent NERDTreeClose
 augroup END
 
