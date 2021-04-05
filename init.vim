@@ -8,6 +8,7 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
+Plug 'jiangmiao/auto-pairs'
 
 if !has("nvim-0.5")
 	Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -23,7 +24,6 @@ Plug 'DanDanCool/JollyTheme'
 if has("nvim-0.5")
 	Plug 'neovim/nvim-lspconfig'
 	Plug 'nvim-lua/completion-nvim'
-	Plug 'jiangmiao/auto-pairs'
 	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 
@@ -97,7 +97,11 @@ augroup autocommands
 	autocmd BufWritePre * %s/\s\+$//e
 	autocmd BufWritePost * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
-	autocmd WinNew * silent NERDTreeMirror | silent NERDTreeClose
+	autocmd WinNew * silent! NERDTreeMirror | silent! NERDTreeClose
+	autocmd FileType nerdtree vnoremap <buffer> t :call tree#open_nodes('t', 1)<CR> |
+				\ vnoremap <buffer> dd :call tree#delete_nodes(1)<CR> |
+				\ vnoremap <buffer m :call tree#move_nodes(1)<CR> |
+				\ vnoremap <buffer> c :call tree#copy_nodes(1)<CR>
 augroup END
 
 "Settings for nightly build
@@ -142,25 +146,25 @@ EOF
 endif "nightly build settings"
 
 "tagbar
-nnoremap ; :UserTagbarToggle<CR>
+nnoremap ; :ShowTags<CR>
 let g:tagbar_compact = 2
 let g:tagbar_foldlevel = 2
 let g:tagbar_autofocus = 1
 let g:tagbar_no_autocmds = 1
 
-command! -nargs=0 UserTagbarToggle call tagbar#ToggleWindow() | call lightline#update()
+command! -nargs=0 ShowTags call tagbar#ToggleWindow() | call lightline#update()
 
 "JollyTheme
 let g:JollyTransparentBackground = 1
 
 "airline"
-so $HOME/appdata/local/nvim/airlineinit.vim
+so $HOME/appdata/local/nvim/airline.vim
 
 "lightline
-so $HOME/appdata/local/nvim/lightlineinit.vim
+so $HOME/appdata/local/nvim/lightline.vim
 
 "NerdTree"
-nnoremap <C-N> :UserNERDTreeToggle<Return>
+nnoremap <C-N> :Tree<Return>
 let NERDTreeMinimalUI			= 1
 let NERDTreeAutoDeleteBuffer	= 1
 let NERDTreeNaturalSort			= 1
@@ -169,13 +173,13 @@ let NERDTreeMouseMode			= 2
 let NERDTreeDirArrowExpandable	= "+"
 let NERDTreeDirArrowCollapsible = "-"
 
-command! -n=? -complete=dir -bar UserNERDTreeToggle :call g:NERDTreeCreator.ToggleTabTree('<args>') |
+command! -n=? -complete=dir -bar Tree :call g:NERDTreeCreator.ToggleTabTree('<args>') |
 	\ :call lightline#update()
 
-"FZF"
+"FZF
 nnoremap <C-P> :FZF<Return>
 
-"Coc"
+"Coc
 if !has("nvim-0.5")
-	so $HOME/appdata/local/nvim/cocinit.vim
+	so $HOME/appdata/local/nvim/coc.vim
 endif

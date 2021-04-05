@@ -27,7 +27,7 @@ let g:lightline.inactive = {
 
 let g:lightline.component_function = {
 	\ 'filename': 'LightlineFilename',
-	\ 'inactivefilename': 'LightlineTabname',
+	\ 'inactivefilename': 'LightlineInactiveFilename',
 	\ 'mode': 'LightlineMode',
 	\ 'statusline': 'LightlineStatusline'
 	\ }
@@ -44,8 +44,6 @@ let g:lightline.tab = {
 
 let g:lightline.tab_component_function = {
 	\ 'filename': 'LightlineTabname',
-	\ 'modified': 'lightline#tab#modified',
-	\ 'readonly': 'lightline#tab#readonly',
 	\ 'tabnum': 'lightline#tab#tabnum'
 	\ }
 
@@ -78,22 +76,20 @@ let g:lightline.component = {
 	\ 'winnr': '%{winnr()}'
 	\ }
 
+"uses filetype detection to determine if current buffer is plugin
 let g:PluginMap = {
-	\ '^__Tagbar__': 'tags',
-	\ '^NERD_tree': 'TREE',
-	\ '\[Plugins\]': 'Plugins'
+	\ 'nerdtree': 'TREE',
+	\ 'tagbar': 'tags',
+	\ 'vim-plug': 'Plugins',
+	\ 'qf': 'quickfix'
 	\ }
 
 func! IsFilePlugin()
 	if !exists('b:IsPlugin')
-		let l:filename = expand('%')
-
-		for l:plugin in keys(g:PluginMap)
-			if l:filename =~# l:plugin
-				let b:IsPlugin = 1
-				return 1
-			endif
-		endfor
+		if has_key(g:PluginMap, &filetype)
+			let b:IsPlugin = 1
+			return 1
+		endif
 
 		let b:IsPlugin = 0
 	endif
@@ -119,15 +115,29 @@ func! LightlineFilename()
 	return l:filename . l:modified
 endfunc
 
-func! LightlineTabname(...)
-	let l:filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
-
+func! LightlineInactiveFilename()
 	if IsFilePlugin()
-		for l:plugin in keys(g:PluginMap)
-			if l:filename =~# l:plugin
-				return g:PluginMap[l:plugin]
-			endif
-		endfor
+		return g:PluginMap[&filetype]
+	endif
+
+	let l:filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+	let l:modified = &modified ? ' +' : ''
+	return l:filename . l:modified
+endfunc
+
+func! LightlineTabname(tabnum)
+	let l:winnr = tabpagewinnr(a:tabnum)
+	let l:filetype = gettabwinvar(a:tabnum, l:winnr, '&filetype')
+
+	if has_key(g:PluginMap, l:filetype)
+		return g:PluginMap[l:filetype]
+	endif
+
+	let l:buflist = tabpagebuflist(a:tabnum)
+	let l:filename = expand('#'.l:buflist[l:winnr - 1].':t')
+
+	if l:filename ==# ''
+		let l:filename = '[No Name]'
 	endif
 
 	let l:modified = &modified ? ' +' : ''
@@ -138,11 +148,7 @@ func! LightlineMode()
 	let l:filename = expand('%')
 
 	if IsFilePlugin()
-		for l:plugin in keys(g:PluginMap)
-			if l:filename =~# l:plugin
-				return g:PluginMap[l:plugin]
-			endif
-		endfor
+		return g:PluginMap[&filetype]
 	endif
 
 	return winwidth(0) > 50 ? lightline#mode() : ''

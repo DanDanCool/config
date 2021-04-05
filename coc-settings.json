@@ -32,16 +32,6 @@
 	"suggest.removeDuplicateItems": true,
 	"suggest.maxCompleteItemCount": 10,
 	"suggest.autoTrigger": "none",
-	"clangd.path": "C:\\Users\\sunda\\AppData\\Local\\coc\\extensions\\coc-clangd-data\\install\\11.0.0\\clangd_11.0.0\\bin\\clangd.exe",
 	"clangd.semanticHighlighting": true,
-	"clangd.disableDiagnostics": true,
-	"pairs.enableCharacters": [
-		"(",
-		"[",
-		"{",
-		"<",
-		"'",
-		"\""
-	],
-	"pairs.enableBackspace": true
+	"clangd.disableDiagnostics": true
 }
