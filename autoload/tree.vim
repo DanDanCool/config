@@ -3,9 +3,6 @@ function! tree#delete_nodes(confirmEach) range
 	let l:curLine = a:firstline
 
 	while l:curLine <= a:lastline
-		call cursor(l:curLine, 1)
-		let l:node = g:NERDTreeFileNode.GetSelected()
-
 		if a:confirmEach && (l:response < 3)
 			let l:response = confirm("Are you sure? ", "&Yes\n&No\n&All\n&Cancel")
 			if l:response == 0  " Make Escape behave like Cancel
@@ -15,6 +12,9 @@ function! tree#delete_nodes(confirmEach) range
 		endif
 
 		if !a:confirmEach || l:response == 1 || l:response == 3
+			call cursor(l:curLine, 1)
+			let l:node = g:NERDTreeFileNode.GetSelected()
+
 			call l:node.delete()
 		endif
 
@@ -35,9 +35,6 @@ function! tree#open_nodes(target, confirmEach) range
 	let l:curLine = a:firstline
 
 	while l:curLine <= a:lastline
-		call cursor(l:curLine, 1)
-		let l:node = g:NERDTreeFileNode.GetSelected()
-
 		if a:confirmEach && (l:response < 3)
 			let l:response = confirm("Are you sure? ", "&Yes\n&No\n&All\n&Cancel")
 			if l:response == 0  " Make Escape behave like Cancel
@@ -47,6 +44,9 @@ function! tree#open_nodes(target, confirmEach) range
 		endif
 
 		if !a:confirmEach || l:response == 1 || l:response == 3
+			call cursor(l:curLine, 1)
+			let l:node = g:NERDTreeFileNode.GetSelected()
+
 			if !empty(l:node) && !l:node.path.isDirectory
 				silent call l:node.open({'where':a:target,'stay':1,'keepopen':1})
 			endif
@@ -84,14 +84,10 @@ func! tree#move_nodes(confirmEach) range
 		call mkdir(l:directory, 'p')
 	endif
 
-	let l:destination = l:directory . fnamemodify(l:node.path.str(), ':t')
 	let l:response = 0
 	let l:curLine = a:firstline
 
 	while l:curLine <= a:lastline
-		call cursor(l:curLine, 1)
-		let l:node = g:NERDTreeFileNode.GetSelected()
-
 		if a:confirmEach && (l:response < 3)
 			let l:response = confirm("Are you sure? ", "&Yes\n&No\n&All\n&Cancel")
 			if l:response == 0  " Make Escape behave like Cancel
@@ -101,6 +97,10 @@ func! tree#move_nodes(confirmEach) range
 		endif
 
 		if !a:confirmEach || l:response == 1 || l:response == 3
+			call cursor(l:curLine, 1)
+			let l:node = g:NERDTreeFileNode.GetSelected()
+			let l:destination = l:directory . fnamemodify(l:node.path.str(), ':t')
+
 			call l:node.rename(l:destination)
 		endif
 
@@ -136,16 +136,13 @@ func! tree#copy_nodes(confirmEach) range
 		call mkdir(l:directory, 'p')
 	endif
 
-	let l:destination = l:directory . fnamemodify(l:node.path.str(), ':t')
 	let l:response = 0
 	let l:curLine = a:firstline
 
 	while l:curLine <= a:lastline
-		call cursor(l:curLine, 1)
-		let l:node = g:NERDTreeFileNode.GetSelected()
-
 		if a:confirmEach && (l:response < 3)
 			let l:response = confirm("Are you sure? ", "&Yes\n&No\n&All\n&Cancel")
+
 			if l:response == 0  " Make Escape behave like Cancel
 				let l:response = 4
 				break
@@ -153,6 +150,10 @@ func! tree#copy_nodes(confirmEach) range
 		endif
 
 		if !a:confirmEach || l:response == 1 || l:response == 3
+			call cursor(l:curLine, 1)
+			let l:node = g:NERDTreeFileNode.GetSelected()
+			let l:destination = l:directory . fnamemodify(l:node.path.str(), ':t')
+
 			call l:node.copy(l:destination)
 		endif
 
