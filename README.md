@@ -1,4 +1,4 @@
-# dotfiles
+# config
 my configuration for terminal + vim + various other things
 
 Git integration provided by:
