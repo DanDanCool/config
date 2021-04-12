@@ -1,3 +1,9 @@
+if exists('g:PairsLoaded')
+	finish
+endif
+
+let g:PairsLoaded = 0
+
 let g:Pairs = {'(': ')', '[': ']', '{': '}', "'": "'", '"': '"', "<": ">"}
 
 func PairsReturn()
@@ -42,6 +48,10 @@ func PairsDelete()
 
 	if has_key(g:Pairs, l:pair)
 		if l:line[l:cursorpos - 1] ==# g:Pairs[l:pair]
+			if l:pair ==# ' '
+				return "\<RIGHT>\<BS>"
+			endif
+
 			return "\<RIGHT>\<BS>\<BS>"
 		endif
 	endif
@@ -50,14 +60,22 @@ func PairsDelete()
 endfunc
 
 func PairsInit()
+	if g:PairsLoaded
+		return
+	endif
+
 	for [l:key, l:item] in items(g:Pairs)
 		execute 'inoremap ' . l:key . ' ' . l:key . l:item . '<LEFT>'
 	endfor
+
+	let g:Pairs[' '] = ' '
 
 	inoremap <expr> <CR> PairsReturn()
 	inoremap <expr> <SPACE> PairsSpace()
 	inoremap <expr> <BS> PairsDelete()
 	inoremap <expr> <C-H> PairsDelete()
+
+	let g:PairsLoaded = 1
 endfunc
 
 call PairsInit()
