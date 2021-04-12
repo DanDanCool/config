@@ -2,13 +2,10 @@ call plug#begin(stdpath('data'))
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-"TODO: write a better plugin for this
-"NOTE: probably reconsider this
 Plug 'jremmen/vim-ripgrep'
 Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
-Plug 'jiangmiao/auto-pairs'
 
 if !has("nvim-0.5")
 	Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -51,8 +48,10 @@ set showtabline=2
 
 let mapleader = "-"
 
-syntax keyword Note NOTE IMPORTANT
-highlight link Note Todo
+if has('win32')
+	" AAAAAAGGGGGHHHHH
+	nmap <C-z> <Nop>
+endif
 
 "Split navigation"
 nnoremap <S-H> <C-W><C-H>
@@ -62,25 +61,15 @@ nnoremap <S-L> <C-W><C-L>
 
 nnoremap gk K
 
-inoremap <S-Del> <Esc>dda
-inoremap <C-Del> <Esc>dei
-
 inoremap <C-S> <Esc>:w<Return>a
 
 "move lines up and down
 inoremap <A-k> <Esc>ddkkp0i
 inoremap <A-j> <Esc>ddp0i
 
-nnoremap <A-k> ddkkp
-nnoremap <A-j> ddp
-
 inoremap <C-E> <s-right>
 inoremap <C-B> <s-left>
 inoremap <C-A> <Esc><S-A>
-
-"undo and redo"
-inoremap <C-Z> <Esc>ui
-inoremap <C-Y> <Esc><C-R>i
 
 "vimrc
 nnoremap <leader>vimrc :vsplit $MYVIMRC<Return>
@@ -88,21 +77,23 @@ nnoremap <leader>rvimrc :so $MYVIMRC<Return>
 
 "commenting
 nnoremap <C-/> 0i//<Esc>0
-nnoremap // :noh<Return>
+nnoremap <silent> // :noh<Return>
 
 augroup autocommands
 	autocmd!
 	autocmd FileType python :noremap <C-/> 0i#<Esc>0
 	autocmd FileType c,cpp setlocal expandtab
 	autocmd BufWritePre * %s/\s\+$//e
-	autocmd BufWritePost * silent! call tagbar#ForceUpdate() | call lightline#update()
-	autocmd BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
+	autocmd BufWritePost,BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd WinNew * silent! NERDTreeMirror | silent! NERDTreeClose
-	autocmd FileType nerdtree vnoremap <buffer> t :call tree#open_nodes('t', 1)<CR> |
-				\ vnoremap <buffer> dd :call tree#delete_nodes(1)<CR> |
-				\ vnoremap <buffer m :call tree#move_nodes(1)<CR> |
-				\ vnoremap <buffer> c :call tree#copy_nodes(1)<CR>
+	autocmd FileType nerdtree vnoremap <silent> <buffer> t :call tree#open_nodes('t', 1)<CR> |
+				\ vnoremap <silent> <buffer> dd :call tree#delete_nodes(1)<CR> |
+				\ vnoremap <silent> <buffer> m :call tree#move_nodes(1)<CR> |
+				\ vnoremap <silent> <buffer> c :call tree#copy_nodes(1)<CR>
 augroup END
+
+syntax keyword Note NOTE IMPORTANT
+highlight link Note Todo
 
 "Settings for nightly build
 if has("nvim-0.5")
@@ -135,6 +126,7 @@ EOF
 	" Use <Tab> and <S-Tab> to navigate through popup menu
 	inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 	inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 	" Set completeopt to have a better completion experience
 	set completeopt=menuone,noinsert,noselect
 	let g:completion_matching_strategy_list = ["exact", "substring", "fuzzy"]
@@ -145,8 +137,11 @@ EOF
 	let g:completion_enable_auto_popup = 0
 endif "nightly build settings"
 
+"pairs
+so $HOME/appdata/local/nvim/pairs.vim
+
 "tagbar
-nnoremap ; :ShowTags<CR>
+nnoremap <silent> ; :ShowTags<CR>
 let g:tagbar_compact = 2
 let g:tagbar_foldlevel = 2
 let g:tagbar_autofocus = 1
@@ -157,14 +152,11 @@ command! -nargs=0 ShowTags call tagbar#ToggleWindow() | call lightline#update()
 "JollyTheme
 let g:JollyTransparentBackground = 1
 
-"airline"
-so $HOME/appdata/local/nvim/airline.vim
-
 "lightline
 so $HOME/appdata/local/nvim/lightline.vim
 
 "NerdTree"
-nnoremap <C-N> :Tree<Return>
+nnoremap <silent> <C-N> :Tree<Return>
 let NERDTreeMinimalUI			= 1
 let NERDTreeAutoDeleteBuffer	= 1
 let NERDTreeNaturalSort			= 1
@@ -177,7 +169,7 @@ command! -n=? -complete=dir -bar Tree :call g:NERDTreeCreator.ToggleTabTree('<ar
 	\ :call lightline#update()
 
 "FZF
-nnoremap <C-P> :FZF<Return>
+nnoremap <silent> <C-P> :FZF<Return>
 
 "Coc
 if !has("nvim-0.5")

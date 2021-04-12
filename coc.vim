@@ -26,11 +26,6 @@ else
 	inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-			\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -47,6 +42,11 @@ function! s:show_documentation()
 	endif
 endfunction
 
+function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
@@ -55,9 +55,6 @@ nmap <leader>rn <Plug>(coc-rename)
 
 augroup coc
 	autocmd!
-	" Setup formatexpr specified filetype(s).
-	autocmd FileType text let b:coc_pairs_disabled = ["'"]
-	" Update signature help on jump placeholder.
 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 	autocmd FileType c,cpp nnoremap <silent><buffer> gk :call <SID>show_documentation()<CR> |
 				\ nnoremap <silent><buffer> gh :CocCommand clangd.switchSourceHeader<cr>
