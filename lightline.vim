@@ -140,7 +140,7 @@ func! LightlineTabname(tabnum)
 		let l:filename = '[No Name]'
 	endif
 
-	let l:modified = gettabwinvar(a:tabnum, l:winnr, '&modified ')? ' +' : ''
+	let l:modified = gettabwinvar(a:tabnum, l:winnr, '&modified ') ? ' +' : ''
 	return l:filename . l:modified
 endfunc
 

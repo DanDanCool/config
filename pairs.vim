@@ -4,7 +4,18 @@ endif
 
 let g:PairsLoaded = 0
 
-let g:Pairs = {'(': ')', '[': ']', '{': '}', "'": "'", '"': '"', "<": ">"}
+let g:Pairs = {'(': ')', '[': ']', '{': '}', "'": "'", '"': '"'}
+
+func PairsQuote()
+	let l:cursorpos = col(".")
+	let l:line = getline(".")
+
+	if l:line[l:cursorpos - 2] =~# '\w'
+		return "'"
+	endif
+
+	return "''\<LEFT>"
+endfunc
 
 func PairsReturn()
 	" col() starts at 1, so it needs to be offset by 1 in splicing
@@ -67,6 +78,8 @@ func PairsInit()
 	for [l:key, l:item] in items(g:Pairs)
 		execute 'inoremap ' . l:key . ' ' . l:key . l:item . '<LEFT>'
 	endfor
+
+	inoremap <expr> ' PairsQuote()
 
 	let g:Pairs[' '] = ' '
 

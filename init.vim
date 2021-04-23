@@ -7,11 +7,6 @@ Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
 
-if !has("nvim-0.5")
-	Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-	Plug 'jackguo380/vim-lsp-cxx-highlight'
-endif
-
 "Pretty"
 Plug 'itchyny/lightline.vim'
 Plug 'ryanoasis/vim-devicons'
@@ -46,6 +41,8 @@ set ignorecase
 
 set showtabline=2
 
+set termguicolors
+
 let mapleader = "-"
 
 if has('win32')
@@ -72,17 +69,26 @@ inoremap <C-B> <s-left>
 inoremap <C-A> <Esc><S-A>
 
 "vimrc
-nnoremap <leader>vimrc :vsplit $MYVIMRC<Return>
-nnoremap <leader>rvimrc :so $MYVIMRC<Return>
+command! -nargs=0 VIMRC vsplit $MYVIMRC
+command! -nargs=0 RVIMRC so $MYVIMRC
+command! -nargs=0 TERM call OpenTerminal()
+
+func! OpenTerminal()
+	tabnew
+	term
+endfunc
 
 "commenting
 nnoremap <C-/> 0i//<Esc>0
 nnoremap <silent> // :noh<Return>
 
+tnoremap <Esc> <C-\><C-n>
+
 augroup autocommands
 	autocmd!
 	autocmd FileType python :noremap <C-/> 0i#<Esc>0
 	autocmd FileType c,cpp setlocal expandtab
+	autocmd FileType text setlocal conceallevel=2
 	autocmd BufWritePre * %s/\s\+$//e
 	autocmd BufWritePost,BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd WinNew * silent! NERDTreeMirror | silent! NERDTreeClose
@@ -90,6 +96,7 @@ augroup autocommands
 				\ vnoremap <silent> <buffer> dd :call tree#delete_nodes(1)<CR> |
 				\ vnoremap <silent> <buffer> m :call tree#move_nodes(1)<CR> |
 				\ vnoremap <silent> <buffer> c :call tree#copy_nodes(1)<CR>
+	autocmd TermOpen * setlocal nonumber
 augroup END
 
 syntax keyword Note NOTE IMPORTANT
@@ -151,6 +158,7 @@ command! -nargs=0 ShowTags call tagbar#ToggleWindow() | call lightline#update()
 
 "JollyTheme
 let g:JollyTransparentBackground = 1
+colo jolly
 
 "lightline
 so $HOME/appdata/local/nvim/lightline.vim
@@ -162,6 +170,7 @@ let NERDTreeAutoDeleteBuffer	= 1
 let NERDTreeNaturalSort			= 1
 let NERDTreeChDirMode			= 2
 let NERDTreeMouseMode			= 2
+let NERDTreeShowHidden			= 1
 let NERDTreeDirArrowExpandable	= "+"
 let NERDTreeDirArrowCollapsible = "-"
 
@@ -170,8 +179,3 @@ command! -n=? -complete=dir -bar Tree :call g:NERDTreeCreator.ToggleTabTree('<ar
 
 "FZF
 nnoremap <silent> <C-P> :FZF<Return>
-
-"Coc
-if !has("nvim-0.5")
-	so $HOME/appdata/local/nvim/coc.vim
-endif
