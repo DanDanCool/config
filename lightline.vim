@@ -81,7 +81,8 @@ let g:PluginMap = {
 	\ 'nerdtree': 'TREE',
 	\ 'tagbar': 'tags',
 	\ 'vim-plug': 'Plugins',
-	\ 'qf': 'quickfix'
+	\ 'qf': 'quickfix',
+	\ 'tsplayground': 'tsplayground'
 	\ }
 
 func! IsFilePlugin()

@@ -32,7 +32,7 @@ highlight link TextTodo Todo
 highlight link TextAssignment Function
 highlight link TextMonth Constant
 highlight link TextNumber Number
-highlight link TextPoint Identifier
+highlight link TextPoint Include
 highlight link TextImportant Keyword
 highlight link TextSpecial Special
 highlight link TextUnderline Underlined

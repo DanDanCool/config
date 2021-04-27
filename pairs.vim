@@ -27,11 +27,16 @@ func PairsReturn()
 
 	if has_key(g:Pairs, l:pair)
 		if l:line[l:cursorpos - 1] ==# g:Pairs[l:pair]
-			if l:pair ==# '{'
-				return "\<CR>\<BS>\<CR>\<UP>\<TAB>"
-			endif
+			let l:output = "\<CR>\<CR>\<UP>\<TAB>"
+			let l:it = 0
+			let l:indent = indent(line("."))
 
-			return "\<CR>\<CR>\<UP>\<TAB>"
+			while l:it < l:indent
+				let l:output .= "\<TAB>"
+				let l:it += shiftwidth()
+			endwhile
+
+			return l:output
 		endif
 	endif
 
