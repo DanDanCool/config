@@ -1,5 +1,6 @@
 # config
 my configuration for terminal + vim + various other things
+
 the pairs script works best with smart indent disabled
 
 # Credits:
