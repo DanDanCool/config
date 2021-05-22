@@ -6,7 +6,7 @@ let g:PairsLoaded = 0
 
 let g:Pairs = {'(': ')', '[': ']', '{': '}', "'": "'", '"': '"'}
 
-func PairsQuote()
+func! PairsQuote()
 	let l:cursorpos = col(".")
 	let l:line = getline(".")
 
@@ -17,7 +17,7 @@ func PairsQuote()
 	return "''\<LEFT>"
 endfunc
 
-func PairsReturn()
+func! PairsReturn()
 	" col() starts at 1, so it needs to be offset by 1 in splicing
 	let l:cursorpos = col(".")
 	let l:line = getline(".")
@@ -43,7 +43,7 @@ func PairsReturn()
 	return "\<CR>"
 endfunc
 
-func PairsSpace()
+func! PairsSpace()
 	let l:cursorpos = col(".")
 	let l:line = getline(".")
 	let l:pair = l:line[l:cursorpos - 2]
@@ -57,7 +57,7 @@ func PairsSpace()
 	return "\<SPACE>"
 endfunc
 
-func PairsDelete()
+func! PairsDelete()
 	let l:cursorpos = col(".")
 	let l:line = getline(".")
 	let l:pair = l:line[l:cursorpos - 2]
@@ -75,7 +75,7 @@ func PairsDelete()
 	return "\<BS>"
 endfunc
 
-func PairsInit()
+func! PairsInit()
 	if g:PairsLoaded
 		return
 	endif
@@ -96,4 +96,17 @@ func PairsInit()
 	let g:PairsLoaded = 1
 endfunc
 
+func! PairsToggle()
+	if g:PairsLoaded
+		for l:key in keys(g:Pairs)
+			iunmap l:key
+		endfor
+
+		let g:PairsLoaded = 0
+	else
+		call PairsInit()
+endfunc
+
 call PairsInit()
+
+command! -nargs=0 PairsToggle call PairsToggle()

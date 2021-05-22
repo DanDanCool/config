@@ -14,7 +14,7 @@ Plug 'DanDanCool/JollyTheme'
 "TODO: move this out when 0.5 becomes stable
 if has("nvim-0.5")
 	Plug 'neovim/nvim-lspconfig'
-	Plug 'nvim-lua/completion-nvim'
+	""Plug 'nvim-lua/completion-nvim'
 	Plug 'nvim-treesitter/nvim-treesitter'
 	"Plug 'nvim-treesitter/playground'
 endif
@@ -57,6 +57,9 @@ nnoremap <S-J> <C-W><C-J>
 nnoremap <S-K> <C-W><C-K>
 nnoremap <S-L> <C-W><C-L>
 
+nnoremap <Up> <cmd>bprev<cr>
+nnoremap <Down> <cmd>bnext<cr>
+
 nnoremap gk K
 
 "move lines up and down
@@ -66,6 +69,10 @@ inoremap <A-j> <Esc>ddp0i
 inoremap <C-E> <s-right>
 inoremap <C-B> <s-left>
 inoremap <C-A> <Esc><S-A>
+
+nnoremap <silent> // <cmd>noh<Return>
+
+nmap gh <Nop>
 
 "vimrc
 command! -nargs=0 VIMRC vsplit $MYVIMRC
@@ -77,17 +84,13 @@ func! OpenTerminal()
 	term
 endfunc
 
-"commenting
-nnoremap <C-/> I//<Esc>0
-nnoremap <silent> // <cmd>noh<Return>
-
 tnoremap <Esc> <C-\><C-n>
 
 augroup autocommands
 	autocmd!
-	autocmd FileType python <cmd>noremap <C-/> I#<Esc>0
-	autocmd FileType c,cpp setlocal expandtab
-	autocmd FileType text setlocal conceallevel=2
+	autocmd FileType python noremap <buffer> <C-/> I#<Esc>0
+	autocmd FileType c,cpp setlocal expandtab |
+				\ nnoremap <buffer> <C-/> I//<Esc>0 |
 	autocmd BufWritePre * %s/\s\+$//e
 	autocmd BufWritePost,BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd WinNew * silent! NERDTreeMirror | silent! NERDTreeClose
@@ -96,7 +99,7 @@ augroup autocommands
 				\ vnoremap <silent> <buffer> m <cmd>call tree#move_nodes(1)<CR> |
 				\ vnoremap <silent> <buffer> c <cmd>call tree#copy_nodes(1)<CR>
 	autocmd TermOpen * setlocal nonumber
-augroup END
+augroup end
 
 syntax keyword Note NOTE IMPORTANT
 highlight link Note Todo
@@ -115,7 +118,7 @@ lua << EOF
 		vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', map_opts)
 		vim.api.nvim_buf_set_keymap(bufnr, 'n', 'rn', '<cmd>lua vim.lsp.buf.rename()<cr>', map_opts)
 
-		require'completion'.on_attach()
+		require'completion'.setup()
 	end
 
 	lspconfig.clangd.setup{
@@ -171,6 +174,15 @@ EOF
 	let g:completion_enable_auto_popup = 0
 	let g:completion_menu_length = 30
 	let g:completion_abbr_length = 30
+
+""	imap <silent> <c-p> <Plug>(completion_trigger)
+""	imap <silent> <c-n> <Plug>(completion_trigger)
+
+	inoremap <silent> <Plug>(completion_trigger)
+				\ <cmd>lua require'completion'.triggerCompletion()<cr>
+
+	imap <silent> <c-p> <Plug>(completion_trigger)
+	imap <silent> <c-n> <Plug>(completion_trigger)
 endif "nightly build settings"
 
 "pairs
@@ -180,8 +192,8 @@ so $HOME/appdata/local/nvim/pairs.vim
 nnoremap <silent> ; <cmd>ShowTags<CR>
 let g:tagbar_compact		= 2
 let g:tagbar_foldlevel		= 2
-let g:tagbar_autofocus		= 1
 let g:tagbar_no_autocmds	= 1
+let g:tagbar_sort			= 0
 
 command! -nargs=0 ShowTags call tagbar#ToggleWindow() | call lightline#update()
 
@@ -207,5 +219,14 @@ let NERDTreeDirArrowCollapsible		= "-"
 command! -n=? -complete=dir -bar Tree :call g:NERDTreeCreator.ToggleTabTree('<args>') |
 	\ :call lightline#update()
 
+"disable garbage plugin
+let g:loaded_netrw			= 1
+let g:loaded_netrwPlugin	= 1
+
 "FZF
+let g:fzf_action = {
+	\ 'ctrl-t': 'tab split',
+	\ 'ctrl-h': 'split',
+	\ 'ctrl-s': 'vsplit' }
+
 nnoremap <silent> <C-P> <cmd>FZF<Return>

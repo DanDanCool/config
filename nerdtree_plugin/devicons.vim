@@ -49,14 +49,11 @@ let g:DevIconsFileNodeExtensionSymbols = {
 	\ 'jpeg'     : '',
 	\ 'bmp'      : '',
 	\ 'png'      : '',
-	\ 'webp'     : '',
 	\ 'gif'      : '',
 	\ 'ico'      : '',
-	\ 'cpp'      : '',
-	\ 'c++'      : '',
-	\ 'cxx'      : '',
-	\ 'cc'       : '',
-	\ 'cp'       : '',
+	\ 'cpp'      : '',
+	\ 'cxx'      : '',
+	\ 'cc'       : '',
 	\ 'c'        : '',
 	\ 'cs'       : '',
 	\ 'h'        : '',
@@ -90,6 +87,7 @@ augroup devicons
 	autocmd FileType nerdtree syntax match hideBracketsInNerdTree "\[" contained conceal containedin=NERDTreeLinkDir
 	autocmd FileType nerdtree setlocal conceallevel=3
 	autocmd FileType nerdtree setlocal concealcursor=nvic
+	autocmd FileType nerdtree call HighlightNodeExtensions()
 augroup END
 
 function! DevIconsGetFileTypeSymbol(nodeName)
@@ -279,3 +277,44 @@ call NERDTreeAddKeyMap({
 	\ 'callback': 'DevIconsNERDTreeMapUpdirKeepOpen',
 	\ 'override': 1,
 	\ 'scope': 'all' })
+
+"taken from https://github.com/tiagofumo/vim-nerdtree-syntax-highlight
+let g:FileNodeExtensionColors = {
+	\ 'md'		: "f09f17",
+	\ 'json'	: "71909e",
+	\ 'py'		: "f09f17",
+	\ 'conf'	: "71909e",
+	\ 'png'		: "31496d",
+	\ 'c'		: "1682af",
+	\ 'cs'		: "1682af",
+	\ 'h'		: "1682af",
+	\ 'lua'		: "7e2793",
+	\ 'sh'		: "7e2793",
+	\ 'sln'		: "7e2793",
+	\ 'vim'		: "63aa53",
+\}
+
+let g:FileNodeExactMatches = {
+	\ 'license'	: "f09f17"
+\}
+
+func! HighlightNodeExtensions()
+	syntax match nerdtreeFileExtensionIcon_misc "" containedin=NERDTreeFlags
+	highlight nerdtreeFileExtensionIcon_misc guifg=#9b9b9b
+
+	for [key, val] in items(g:FileNodeExtensionColors)
+		let l:icon_identifier = 'nerdtreeFileExtensionIcon_' . key
+		let l:icon = g:DevIconsFileNodeExtensionSymbols[key]
+
+		exec 'silent syn match ' . l:icon_identifier . ' "' . l:icon . '" containedin=NERDTreeFlags'
+		exec "silent hi " . l:icon_identifier . " guifg=#" . val
+	endfor
+
+	for [key, val] in items(g:FileNodeExactMatches)
+		let l:icon_identifier = 'nerdtreeExactMatchIcon_' . key
+		let l:icon = g:DevIconsFileNodeExactSymbols[key]
+
+		exec 'silent syn match ' . l:icon_identifier . ' "' . l:icon . '" containedin=NERDTreeFlags'
+		exec "silent hi " . l:icon_identifier . " guifg=#" . val
+	endfor
+endfunc
