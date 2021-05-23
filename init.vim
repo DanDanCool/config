@@ -2,7 +2,6 @@ call plug#begin(stdpath('data'))
 
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'jremmen/vim-ripgrep'
 Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
@@ -11,8 +10,6 @@ Plug 'itchyny/lightline.vim'
 "TODO: move this out when 0.5 becomes stable
 if has("nvim-0.5")
 	Plug 'neovim/nvim-lspconfig'
-	""Plug 'nvim-treesitter/nvim-treesitter'
-	"Plug 'nvim-treesitter/playground'
 endif
 
 call plug#end()
@@ -73,9 +70,9 @@ nmap gh <Nop>
 "vimrc
 command! -nargs=0 VIMRC vsplit $MYVIMRC
 command! -nargs=0 RVIMRC so $MYVIMRC
-command! -nargs=0 TERM call OpenTerminal()
+command! -nargs=0 TERM call s:OpenTerminal()
 
-func! OpenTerminal()
+func! s:OpenTerminal()
 	tabnew
 	term
 endfunc
@@ -121,6 +118,7 @@ lua << EOF
 		on_attach = clangd_on_attach
 	}
 
+	-- disable diagnostics
 	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 		vim.lsp.diagnostic.on_publish_diagnostics, {
 			underline = false,
@@ -155,6 +153,28 @@ endif "nightly build settings"
 
 "pairs
 so $HOME/appdata/local/nvim/pairs.vim
+
+"ripgrep
+let &t_TI = ''
+let &t_TE = ''
+
+let &grepprg = 'rg --vimgrep'
+let &grepformat = "%f:%l:%c:%m"
+
+func! s:Rg(txt)
+	silent! exe 'grep! ' . a:txt
+
+	if len(getqflist())
+		botright copen
+		redraw!
+	else
+		cclose
+		redraw!
+		echo "No match found for " . a:txt
+	endif
+endfunc
+
+command! -nargs=* -complete=file Rg :call s:Rg(<q-args>)
 
 "tagbar
 nnoremap <silent> ; <cmd>ShowTags<CR>
