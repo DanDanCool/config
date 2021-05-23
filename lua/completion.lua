@@ -50,7 +50,7 @@ end
 function completion.setup()
 	state.getTriggerCharacters()
 
-	vim.api.nvim_command("augroup CompletionCommand")
+	vim.api.nvim_command("augroup completion")
 	vim.api.nvim_command("autocmd! * <buffer>")
 	vim.api.nvim_command("autocmd InsertEnter <buffer> lua require'completion'.insertEnter()")
 	vim.api.nvim_command("autocmd InsertLeave <buffer> lua require'completion'.insertLeave()")

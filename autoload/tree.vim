@@ -3,18 +3,16 @@ function! tree#delete_nodes(confirmEach) range
 	let l:curLine = a:firstline
 
 	while l:curLine <= a:lastline
+		call cursor(l:curLine, 1)
+		let l:node = g:NERDTreeFileNode.GetSelected()
+
 		if a:confirmEach && (l:response < 3)
-			let l:response = confirm("Are you sure? ", "&Yes\n&No\n&All\n&Cancel")
-			if l:response == 0  " Make Escape behave like Cancel
-				let l:response = 4
-				break
-			endif
+			let l:pathstr = fnamemodify(l:node.path.str({'format': 'Edit'}), ":t")
+			let l:confirmationstr = "Delete " . l:pathstr . ", Are you sure? "
+			let l:response = confirm(l:confirmationstr, "&Yes\n&No\n&All\n&Cancel", 4)
 		endif
 
-		if !a:confirmEach || l:response == 1 || l:response == 3
-			call cursor(l:curLine, 1)
-			let l:node = g:NERDTreeFileNode.GetSelected()
-
+		if l:response == 1 || l:response == 3
 			call l:node.delete()
 		endif
 
@@ -35,18 +33,16 @@ function! tree#open_nodes(target, confirmEach) range
 	let l:curLine = a:firstline
 
 	while l:curLine <= a:lastline
+		call cursor(l:curLine, 1)
+		let l:node = g:NERDTreeFileNode.GetSelected()
+
 		if a:confirmEach && (l:response < 3)
-			let l:response = confirm("Are you sure? ", "&Yes\n&No\n&All\n&Cancel")
-			if l:response == 0  " Make Escape behave like Cancel
-				let l:response = 4
-				break
-			endif
+			let l:pathstr = fnamemodify(l:node.path.str({'format': 'Edit'}), ":t")
+			let l:confirmationstr = "Open " . l:pathstr . ", Are you sure? "
+			let l:response = confirm(l:confirmationstr, "&Yes\n&No\n&All\n&Cancel", 4)
 		endif
 
-		if !a:confirmEach || l:response == 1 || l:response == 3
-			call cursor(l:curLine, 1)
-			let l:node = g:NERDTreeFileNode.GetSelected()
-
+		if l:response == 1 || l:response == 3
 			if !empty(l:node) && !l:node.path.isDirectory
 				silent call l:node.open({'where':a:target,'stay':1,'keepopen':1})
 			endif
@@ -88,19 +84,17 @@ func! tree#move_nodes(confirmEach) range
 	let l:curLine = a:firstline
 
 	while l:curLine <= a:lastline
+		call cursor(l:curLine, 1)
+		let l:node = g:NERDTreeFileNode.GetSelected()
+
 		if a:confirmEach && (l:response < 3)
-			let l:response = confirm("Are you sure? ", "&Yes\n&No\n&All\n&Cancel")
-			if l:response == 0  " Make Escape behave like Cancel
-				let l:response = 4
-				break
-			endif
+			let l:pathstr = fnamemodify(l:node.path.str({'format': 'Edit'}), ":t")
+			let l:confirmationstr = "Move " . l:pathstr . ", Are you sure? "
+			let l:response = confirm(l:confirmationstr, "&Yes\n&No\n&All\n&Cancel", 4)
 		endif
 
 		if !a:confirmEach || l:response == 1 || l:response == 3
-			call cursor(l:curLine, 1)
-			let l:node = g:NERDTreeFileNode.GetSelected()
 			let l:destination = l:directory . fnamemodify(l:node.path.str(), ':t')
-
 			call l:node.rename(l:destination)
 		endif
 

@@ -6,16 +6,12 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
-
-"Pretty"
 Plug 'itchyny/lightline.vim'
-Plug 'DanDanCool/JollyTheme'
 
 "TODO: move this out when 0.5 becomes stable
 if has("nvim-0.5")
 	Plug 'neovim/nvim-lspconfig'
-	""Plug 'nvim-lua/completion-nvim'
-	Plug 'nvim-treesitter/nvim-treesitter'
+	""Plug 'nvim-treesitter/nvim-treesitter'
 	"Plug 'nvim-treesitter/playground'
 endif
 
@@ -94,10 +90,10 @@ augroup autocommands
 	autocmd BufWritePre * %s/\s\+$//e
 	autocmd BufWritePost,BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd WinNew * silent! NERDTreeMirror | silent! NERDTreeClose
-	autocmd FileType nerdtree vnoremap <silent> <buffer> t <cmd>call tree#open_nodes('t', 1)<CR> |
-				\ vnoremap <silent> <buffer> dd <cmd>call tree#delete_nodes(1)<CR> |
-				\ vnoremap <silent> <buffer> m <cmd>call tree#move_nodes(1)<CR> |
-				\ vnoremap <silent> <buffer> c <cmd>call tree#copy_nodes(1)<CR>
+	autocmd FileType nerdtree vnoremap <silent> <buffer> t :call tree#open_nodes('t', 1)<CR> |
+				\ vnoremap <silent> <buffer> dd :call tree#delete_nodes(1)<CR> |
+				\ vnoremap <silent> <buffer> m :call tree#move_nodes(1)<CR> |
+				\ vnoremap <silent> <buffer> c :call tree#copy_nodes(1)<CR>
 	autocmd TermOpen * setlocal nonumber
 augroup end
 
@@ -133,33 +129,6 @@ lua << EOF
 			update_in_insert = false
 		}
 	)
-
-	require 'nvim-treesitter.install'.compilers = { "clang", "gcc" }
-
-	require'nvim-treesitter.configs'.setup {
-		highlight = {
-			enable = true,
-		},
-
-		playground = {
-			enable = true,
-			disable = {},
-			updatetime = 25,
-			persist_queries = false,
-			keybindings = {
-				toggle_query_editor = 'o',
-				toggle_hl_groups = 'i',
-				toggle_injected_languages = 't',
-				toggle_anonymous_nodes = 'a',
-				toggle_language_display = 'I',
-				focus_language = 'f',
-				unfocus_language = 'F',
-				update = 'R',
-				goto_node = '<cr>',
-				show_help = '?'
-			}
-		}
-	}
 EOF
 
 	command! -nargs=0 Format lua vim.lsp.buf.formatting()
@@ -175,14 +144,13 @@ EOF
 	let g:completion_menu_length = 30
 	let g:completion_abbr_length = 30
 
-""	imap <silent> <c-p> <Plug>(completion_trigger)
-""	imap <silent> <c-n> <Plug>(completion_trigger)
-
 	inoremap <silent> <Plug>(completion_trigger)
 				\ <cmd>lua require'completion'.triggerCompletion()<cr>
 
 	imap <silent> <c-p> <Plug>(completion_trigger)
 	imap <silent> <c-n> <Plug>(completion_trigger)
+
+	so $HOME/appdata/local/nvim/treesitter.vim
 endif "nightly build settings"
 
 "pairs
