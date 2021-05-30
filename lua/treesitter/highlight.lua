@@ -102,25 +102,20 @@ function highlight.attach()
 	local lang = vim.api.nvim_buf_get_option(bufnr, "ft")
 	local parser = ts.get_parser(bufnr, lang)
 
-	ts.highlighter.new(parser, {})
+	local highlighter = ts.highlighter.new(parser, {})
 
-	vim.api.nvim_buf_attach(bufnr, false, {
-		on_detach = function()
-			if ts.highlighter.active[bufnr] then
-				ts.highlighter.active[bufnr]:destroy()
-			end
-
-			api.nvim_buf_set_option(bufnr, 'syntax', 'ON')
-		end})
+	vim.api.nvim_buf_attach(bufnr, false, { on_detach = function()
+		highlighter:destroy()
+	end })
 end
 
-function highlight.setup()
+function highlight.setup(config)
 	vim.api.nvim_command("augroup ts_highlight")
 	vim.api.nvim_command("autocmd!")
 
-	for parser, config in pairs(vim.g.parser_config) do
-		if config["enable"] then
-			vim.api.nvim_command(string.format("autocmd Filetype %s lua require'treesitter.highlight'.attach()", config["name"]))
+	for parser, enable in pairs(config) do
+		if enable then
+			vim.api.nvim_command(string.format("autocmd Filetype %s lua require'treesitter.highlight'.attach()", parser))
 		end
 	end
 

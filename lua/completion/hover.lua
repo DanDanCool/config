@@ -196,6 +196,7 @@ local function lspHoverHandler(_, method, result)
 		})
 
 		hover.winnr = winnr
+		hover.bufnr = bufnr
 
 		if winnr ~= nil and vim.api.nvim_win_is_valid(winnr) then
 			vim.lsp.util.close_preview_autocmd({"CursorMoved", "BufHidden", "InsertCharPre"}, winnr)
@@ -220,6 +221,7 @@ function hover.autoHover()
 		-- close any existing old windows
 		if hover.winnr ~= nil and vim.api.nvim_win_is_valid(hover.winnr) then
 			vim.api.nvim_win_close(hover.winnr, true)
+			vim.api.nvim_buf_delete(hover.bufnr)
 		end
 
 		hover.winnr = nil
@@ -234,6 +236,7 @@ function hover.autoHover()
 		-- close any existing old windows
 		if hover.winnr ~= nil and vim.api.nvim_win_is_valid(hover.winnr) then
 			vim.api.nvim_win_close(hover.winnr, true)
+			vim.api.nvim_buf_delete(hover.bufnr)
 		end
 
 		hover.winnr = nil

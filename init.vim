@@ -1,7 +1,5 @@
 call plug#begin(stdpath('data'))
 
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
@@ -30,11 +28,8 @@ set foldmethod=indent
 set foldlevelstart=5
 
 set ignorecase
-
 set showtabline=2
-
 set termguicolors
-
 set pumheight=15
 
 let mapleader = "-"
@@ -94,12 +89,20 @@ augroup autocommands
 	autocmd TermOpen * setlocal nonumber
 augroup end
 
-syntax keyword Note NOTE IMPORTANT
-highlight link Note Todo
+func! s:so(path)
+	let l:dir = fnamemodify(expand("$MYVIMRC"), ":h")
+	let l:sep = '/'
+
+	if has('win32')
+		let l:sep = '\'
+	endif
+
+	let l:path = l:dir . l:sep . a:path
+	exe 'so ' . l:path
+endfunc
 
 "Settings for nightly build
 if has("nvim-0.5")
-	"nvim-lspconfig"
 
 lua << EOF
 	local lspconfig = require'lspconfig'
@@ -127,20 +130,16 @@ lua << EOF
 			update_in_insert = false
 		}
 	)
+
+	require'treesitter'.setup()
 EOF
 
 	command! -nargs=0 Format lua vim.lsp.buf.formatting()
 
 	" Set completeopt to have a better completion experience
 	set completeopt=menuone,noinsert,noselect
-	let g:completion_matching_strategy_list = ["exact", "substring"]
-
 	" Avoid showing message extra message when using completion
 	set shortmess+=c
-
-	let g:completion_enable_auto_popup = 0
-	let g:completion_menu_length = 30
-	let g:completion_abbr_length = 30
 
 	inoremap <silent> <Plug>(completion_trigger)
 				\ <cmd>lua require'completion'.triggerCompletion()<cr>
@@ -148,11 +147,10 @@ EOF
 	imap <silent> <c-p> <Plug>(completion_trigger)
 	imap <silent> <c-n> <Plug>(completion_trigger)
 
-	so $HOME/appdata/local/nvim/treesitter.vim
 endif "nightly build settings"
 
 "pairs
-so $HOME/appdata/local/nvim/pairs.vim
+call s:so("pairs.vim")
 
 "ripgrep
 let &t_TI = ''
@@ -190,7 +188,7 @@ let g:JollyTransparentBackground = 1
 colo jolly
 
 "lightline
-so $HOME/appdata/local/nvim/lightline.vim
+call s:so("lightline.vim")
 
 "NerdTree"
 nnoremap <silent> <C-N> <cmd>Tree<Return>
@@ -212,9 +210,4 @@ let g:loaded_netrw			= 1
 let g:loaded_netrwPlugin	= 1
 
 "FZF
-let g:fzf_action = {
-	\ 'ctrl-t': 'tab split',
-	\ 'ctrl-h': 'split',
-	\ 'ctrl-s': 'vsplit' }
-
-nnoremap <silent> <C-P> <cmd>FZF<Return>
+nnoremap <silent> <C-P> <cmd>lua require'fzf'.run()<Return>
