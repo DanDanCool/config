@@ -47,6 +47,8 @@ function fzf.run()
 
 	vim.api.nvim_set_current_buf(fzf.buf)
 	vim.cmd('term ' .. cmd)
+	vim.wo.statusline = '%#STLText# fzf'
+	vim.bo.filetype = 'fzf'
 	vim.api.nvim_input('i')
 
 	vim.cmd('autocmd TermClose <buffer> lua require"fzf".cleanup()')

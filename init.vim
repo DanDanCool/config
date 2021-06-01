@@ -3,12 +3,7 @@ call plug#begin(stdpath('data'))
 Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
-Plug 'itchyny/lightline.vim'
-
-"TODO: move this out when 0.5 becomes stable
-if has("nvim-0.5")
-	Plug 'neovim/nvim-lspconfig'
-endif
+Plug 'neovim/nvim-lspconfig'
 
 call plug#end()
 
@@ -80,7 +75,6 @@ augroup autocommands
 	autocmd FileType c,cpp setlocal expandtab |
 				\ nnoremap <buffer> <C-/> I//<Esc>0 |
 	autocmd BufWritePre * %s/\s\+$//e
-	autocmd BufWritePost,BufWinEnter * silent! call tagbar#ForceUpdate() | call lightline#update()
 	autocmd WinNew * silent! NERDTreeMirror | silent! NERDTreeClose
 	autocmd FileType nerdtree vnoremap <silent> <buffer> t :call tree#open_nodes('t', 1)<CR> |
 				\ vnoremap <silent> <buffer> dd :call tree#delete_nodes(1)<CR> |
@@ -100,9 +94,6 @@ func! s:so(path)
 	let l:path = l:dir . l:sep . a:path
 	exe 'so ' . l:path
 endfunc
-
-"Settings for nightly build
-if has("nvim-0.5")
 
 lua << EOF
 	local lspconfig = require'lspconfig'
@@ -134,20 +125,16 @@ lua << EOF
 	require'treesitter'.setup()
 EOF
 
-	command! -nargs=0 Format lua vim.lsp.buf.formatting()
+command! -nargs=0 Format lua vim.lsp.buf.formatting()
 
-	" Set completeopt to have a better completion experience
-	set completeopt=menuone,noinsert,noselect
-	" Avoid showing message extra message when using completion
-	set shortmess+=c
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
 
-	inoremap <silent> <Plug>(completion_trigger)
-				\ <cmd>lua require'completion'.triggerCompletion()<cr>
+inoremap <silent> <Plug>(completion_trigger)
+			\ <cmd>lua require'completion'.triggerCompletion()<cr>
 
-	imap <silent> <c-p> <Plug>(completion_trigger)
-	imap <silent> <c-n> <Plug>(completion_trigger)
-
-endif "nightly build settings"
+imap <silent> <c-p> <Plug>(completion_trigger)
+imap <silent> <c-n> <Plug>(completion_trigger)
 
 "pairs
 call s:so("pairs.vim")
@@ -178,17 +165,16 @@ command! -nargs=* -complete=file Rg :call s:Rg(<q-args>)
 nnoremap <silent> ; <cmd>ShowTags<CR>
 let g:tagbar_compact		= 2
 let g:tagbar_foldlevel		= 2
-let g:tagbar_no_autocmds	= 1
 let g:tagbar_sort			= 0
 
-command! -nargs=0 ShowTags call tagbar#ToggleWindow() | call lightline#update()
+command! -nargs=0 ShowTags call tagbar#ToggleWindow()
 
 "JollyTheme
-let g:JollyTransparentBackground = 1
+let g:TransparentBackground = 1
 colo jolly
 
-"lightline
-call s:so("lightline.vim")
+"statusline
+call s:so("statusline.vim")
 
 "NerdTree"
 nnoremap <silent> <C-N> <cmd>Tree<Return>
@@ -202,8 +188,7 @@ let NERDTreeCascadeSingleChildDir	= 0
 let NERDTreeDirArrowExpandable		= "+"
 let NERDTreeDirArrowCollapsible		= "-"
 
-command! -n=? -complete=dir -bar Tree :call g:NERDTreeCreator.ToggleTabTree('<args>') |
-	\ :call lightline#update()
+command! -n=? -complete=dir -bar Tree :call g:NERDTreeCreator.ToggleTabTree('<args>')
 
 "disable garbage plugin
 let g:loaded_netrw			= 1

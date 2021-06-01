@@ -1,9 +1,5 @@
 "Super awesome Jolly theme! :3
 
-if !has("gui_running") && &t_Co != 256
-	finish
-endif
-
 set background=dark
 highlight clear
 
@@ -11,11 +7,11 @@ if exists("syntax_on")
 	syntax reset
 endif
 
-let g:colors_name = "JollyTheme"
+let g:colors_name = "jolly"
 
 let s:JollyColors = {}
 
-if get(g:, "JollyTransparentBackground", 0) > 0
+if get(g:, "TransparentBackground", 0) > 0
 	let s:JollyColors.Normal	= {"fg": "white", "guifg": "#dcdcdc"}
 	let s:JollyColors.VertSplit = {"cterm": "NONE", "fg": "38", "bg": "NONE",
 				\	"gui": "NONE", "guifg": "#232526", "guibg": "NONE"}
@@ -50,29 +46,29 @@ let s:JollyColors.Include		= {"fg": "245", "guifg": "#9b9b9b"}
 let s:JollyColors.Type			= {"fg": "98", "guifg": "#9039c6"}
 let s:JollyColors.Structure		= {"fg": "98", "guifg": "#9039c6"}
 
-let s:JollyColors.Special		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
-let s:JollyColors.Underlined	= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
-let s:JollyColors.Ignore		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
-let s:JollyColors.Error			= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
+""let s:JollyColors.Special		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
+""let s:JollyColors.Underlined	= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
+""let s:JollyColors.Ignore		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
+""let s:JollyColors.Error			= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
 let s:JollyColors.Todo			= {"fg": "white", "bg": "28", "guifg": "#1B141B", "guibg": "#4EB13E"}
 
 "Misc"
-let s:JollyColors.Folded		= {"fg": "white", "bg": "54", "guifg": "#ffffff", "guibg": "#594359"}
+let s:JollyColors.Folded		= {"fg": "white", "bg": "54", "guifg": "#dcdcdc", "guibg": "#594359"}
 let s:JollyColors.Visual		= {"bg": "242", "guibg": "#594359"}
 let s:JollyColors.Search		= {"fg": "black", "bg": "198", "guifg": "#1B141B", "guibg": "#F92672"}
 let s:JollyColors.LineNr		= {"fg":  "38", "guifg": "#0089b7"}
-let s:JollyColors.Pmenu			= {"fg": "white", "bg": "92", "guifg": "#ffffff", "guibg": "#231a23"}
-let s:JollyColors.PmenuSel		= {"fg": "white", "bg": "62", "guifg": "#ffffff", "guibg": "#594359"}
+let s:JollyColors.Pmenu			= {"fg": "white", "bg": "92", "guifg": "#dcdcdc", "guibg": "#231a23"}
+let s:JollyColors.PmenuSel		= {"fg": "white", "bg": "62", "guifg": "#dcdcdc", "guibg": "#594359"}
 
 "colors based off of lightline molokai theme"
-let s:JollyColors.StatusLine	= {"fg": "233", "guifg": "#232526"}
-let s:JollyColors.StatusLineNC	= {"fg": "233", "guifg": "#232526"}
+let s:JollyColors.StatusLine	= {"fg": "233", "guifg": "#232526", "guibg": "#232526"}
+let s:JollyColors.StatusLineNC	= {"fg": "233", "guifg": "#232526", "guibg": "#232526"}
 let s:JollyColors.EndOfBuffer	= {"fg":  "38", "guifg": "#232526"}
 
 "NerdTree
 let s:JollyColors.NERDTreeHelp		= {"fg": "white", "guifg": "#9b9b9b"}
 let s:JollyColors.NERDTreeUp		= {"fg": "white", "guifg": "#9b9b9b"}
-let s:JollyColors.NERDTreeCWD		= {"fg": "white", "guifg": "#F92672"}
+let s:JollyColors.NERDTreeCWD		= {"fg": "white", "guifg": "#9039c6"}
 let s:JollyColors.NERDTreeDir		= {"fg": "white", "guifg": "#5d5dd8"}
 let s:JollyColors.NERDTreeDirSlash	= {"fg": "white", "guifg": "#5d5dd8"}
 let s:JollyColors.NERDTreeOpenable	= {"fg": "white", "guifg": "#0089b7"}
@@ -110,54 +106,8 @@ func s:HighlightFn(group)
 	execute l:highlightCmd
 endfunc
 
-call s:HighlightFn("Normal")
-call s:HighlightFn("Comment")
-
-call s:HighlightFn("Constant")
-call s:HighlightFn("String")
-call s:HighlightFn("Character")
-call s:HighlightFn("Number")
-call s:HighlightFn("Boolean")
-call s:HighlightFn("Float")
-
-call s:HighlightFn("Identifier")
-call s:HighlightFn("Function")
-
-call s:HighlightFn("Statement")
-call s:HighlightFn("Conditional")
-call s:HighlightFn("Repeat")
-call s:HighlightFn("Label")
-call s:HighlightFn("Operator")
-call s:HighlightFn("Exception")
-
-call s:HighlightFn("PreProc")
-call s:HighlightFn("Include")
-
-call s:HighlightFn("Type")
-call s:HighlightFn("Structure")
-
-call s:HighlightFn("Todo")
-
-call s:HighlightFn("Visual")
-call s:HighlightFn("Search")
-call s:HighlightFn("Folded")
-call s:HighlightFn("LineNr")
-call s:HighlightFn("VertSplit")
-call s:HighlightFn("Pmenu")
-call s:HighlightFn("PmenuSel")
-call s:HighlightFn("StatusLine")
-call s:HighlightFn("StatusLineNC")
-call s:HighlightFn("EndOfBuffer")
-
-call s:HighlightFn("NERDTreeHelp")
-call s:HighlightFn("NERDTreeUp")
-call s:HighlightFn("NERDTreeCWD")
-call s:HighlightFn("NERDTreeDir")
-call s:HighlightFn("NERDTreeDirSlash")
-call s:HighlightFn("NERDTreeOpenable")
-call s:HighlightFn("NERDTreeClosable")
-
-call s:HighlightFn("TSNamespace")
-call s:HighlightFn("TSType")
+for k in keys(s:JollyColors)
+	call s:HighlightFn(k)
+endfor
 
 unlet s:JollyColors
