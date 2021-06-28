@@ -11,6 +11,7 @@ the pairs script works best with smart indent disabled
 - fix those errors from complete.lua
 - add the 'additional complete' items from the lsp into complete.lua
 - add fuzzy matching to complete.lua
+- proper credits
 
 # Credits:
 Git integration provided by:
