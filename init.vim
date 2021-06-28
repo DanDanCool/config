@@ -3,11 +3,11 @@ call plug#begin(stdpath('data'))
 Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
-Plug 'neovim/nvim-lspconfig'
 
 call plug#end()
 
 set number
+set nowrap
 set clipboard=unnamed
 set backspace=indent,eol,start
 set noswapfile
@@ -43,19 +43,16 @@ nnoremap <S-L> <C-W><C-L>
 nnoremap <Up> <cmd>bprev<cr>
 nnoremap <Down> <cmd>bnext<cr>
 
-nnoremap gk K
-
 "move lines up and down
 inoremap <A-k> <Esc>ddkkp0i
 inoremap <A-j> <Esc>ddp0i
 
-inoremap <C-E> <s-right>
-inoremap <C-B> <s-left>
-inoremap <C-A> <Esc><S-A>
-
 nnoremap <silent> // <cmd>noh<Return>
 
 nmap gh <Nop>
+nnoremap gk K
+
+tnoremap <Esc> <C-\><C-n>
 
 "vimrc
 command! -nargs=0 VIMRC vsplit $MYVIMRC
@@ -67,11 +64,9 @@ func! s:OpenTerminal()
 	term
 endfunc
 
-tnoremap <Esc> <C-\><C-n>
-
 augroup autocommands
 	autocmd!
-	autocmd FileType python noremap <buffer> <C-/> I#<Esc>0
+	autocmd FileType python nnoremap <buffer> <C-/> I#<Esc>0
 	autocmd FileType c,cpp setlocal expandtab |
 				\ nnoremap <buffer> <C-/> I//<Esc>0 |
 	autocmd BufWritePre * %s/\s\+$//e
@@ -82,18 +77,6 @@ augroup autocommands
 				\ vnoremap <silent> <buffer> c :call tree#copy_nodes(1)<CR>
 	autocmd TermOpen * setlocal nonumber
 augroup end
-
-func! s:so(path)
-	let l:dir = fnamemodify(expand("$MYVIMRC"), ":h")
-	let l:sep = '/'
-
-	if has('win32')
-		let l:sep = '\'
-	endif
-
-	let l:path = l:dir . l:sep . a:path
-	exe 'so ' . l:path
-endfunc
 
 lua << EOF
 	local lspconfig = require'lspconfig'
@@ -108,9 +91,7 @@ lua << EOF
 		require'completion'.setup()
 	end
 
-	lspconfig.clangd.setup{
-		on_attach = clangd_on_attach
-	}
+	lspconfig.clangd.setup({ on_attach = clangd_on_attach })
 
 	-- disable diagnostics
 	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -135,9 +116,6 @@ inoremap <silent> <Plug>(completion_trigger)
 
 imap <silent> <c-p> <Plug>(completion_trigger)
 imap <silent> <c-n> <Plug>(completion_trigger)
-
-"pairs
-call s:so("pairs.vim")
 
 "ripgrep
 let &t_TI = ''
@@ -169,12 +147,9 @@ let g:tagbar_sort			= 0
 
 command! -nargs=0 ShowTags call tagbar#ToggleWindow()
 
-"JollyTheme
+"Theme
 let g:TransparentBackground = 1
-colo jolly
-
-"statusline
-call s:so("statusline.vim")
+colo nord
 
 "NerdTree"
 nnoremap <silent> <C-N> <cmd>Tree<Return>

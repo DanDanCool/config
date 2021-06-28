@@ -43,7 +43,7 @@ function fzf.run()
 --	fzf.win = vim.api.nvim_open_win(fzf.buf, 1, getWinOpts())
 	fzf.temp = os.tmpname()
 
-	local cmd = 'fzf --preview "bat --color always --style plain --line-range :100 --tabs 4 {}" > ' .. fzf.temp
+	local cmd = 'fzf --preview "bat --color always --style plain --line-range :100 --tabs 4 --theme=Nord {}" > ' .. fzf.temp
 
 	vim.api.nvim_set_current_buf(fzf.buf)
 	vim.cmd('term ' .. cmd)

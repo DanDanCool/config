@@ -7,6 +7,15 @@ syntax keyword TextMonth July August September November December
 
 syntax keyword TextAssignment ASSIGNMENT
 
+syntax match TextOperator "\v\*"
+syntax match TextOperator "\v/"
+syntax match TextOperator "\v\+"
+syntax match TextOperator "\v-"
+syntax match TextOperator "\v\?"
+syntax match TextOperator "\v\="
+syntax match TextOperator "\v\^"
+syntax match TextOperator "\v\%"
+
 "matches one or more digits if there are no alphabet characters ahead of it
 syntax match TextNumber "\v([a-zA-Z])@<!\d+"
 
@@ -16,8 +25,8 @@ syntax match TextNumber "\v([a-zA-Z])@<!\d+\.\d+"
 "matches a line that starts with '-'
 syntax match TextPoint "\v\_^\w@!\s*-.+" contains=ALL
 
-"matches a line that starts with #."
-syntax match TextPoint "\v\_^([a-zA-Z])@!\d*\..+" contains=ALL
+"matches a line that starts with #. "
+syntax match TextPoint "\v\_^([a-zA-Z])@!\d*\.\s.+" contains=ALL
 
 "matches a line that starts with any amount of whitespace character
 syntax match TextPoint "\v\_^\s+.+" contains=ALL
@@ -41,3 +50,4 @@ highlight link TextUnderline Underlined
 highlight link TextImportant Keyword
 highlight link TextQuote Comment
 highlight link TextSingleQuote Comment
+highlight link TextOperator Operator

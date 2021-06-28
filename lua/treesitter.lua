@@ -9,8 +9,9 @@ treesitter.parser_config = {
 	cpp		= true,
 	c		= true,
 	lua		= true,
-	python	= true,
-	query	= true
+--	python	= true,
+--	query	= true
+	java	= true
 }
 
 local function setupHighlightGroups()
