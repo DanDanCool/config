@@ -6,6 +6,7 @@
 state = {
 	insertLeave         = false,  -- flag for InsertLeave, prevent every completion if true
 	textHover           = false,  -- handle auto hover
+	textSignature		= false,  -- handle signatures
 	selected            = -1,     -- handle selected items in v:complete-items for auto hover
 	changedTick         = 0,      -- handle changeTick
 	triggerCompletion	= false,  -- flag for manual confirmation of completion
@@ -27,6 +28,7 @@ end
 function state.reset()
 	state.insertLeave		= false
 	state.textHover			= false
+	state.textSignature		= false
 	state.selected			= -1
 	state.triggerCompletion	= false
 	state.forceCompletion	= false

@@ -2,7 +2,6 @@ local state		= require'completion.state'
 local complete	= require'completion.complete'
 local hover		= require'completion.hover'
 local signature	= require'completion.signature'
-local util		= require'completion.util'
 
 local completion = {}
 

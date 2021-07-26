@@ -1,10 +1,14 @@
 call plug#begin(stdpath('data'))
 
-Plug 'preservim/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
+""Plug 'nvim-treesitter/nvim-treesitter'
 
 call plug#end()
+
+"Theme
+let g:TransparentBackground = 1
+colo nord
 
 set number
 set nowrap
@@ -26,6 +30,8 @@ set ignorecase
 set showtabline=2
 set termguicolors
 set pumheight=15
+
+set shada=""
 
 let mapleader = "-"
 
@@ -54,16 +60,6 @@ nnoremap gk K
 
 tnoremap <Esc> <C-\><C-n>
 
-"vimrc
-command! -nargs=0 VIMRC vsplit $MYVIMRC
-command! -nargs=0 RVIMRC so $MYVIMRC
-command! -nargs=0 TERM call s:OpenTerminal()
-
-func! s:OpenTerminal()
-	tabnew
-	term
-endfunc
-
 augroup autocommands
 	autocmd!
 	autocmd FileType python nnoremap <buffer> <C-/> I#<Esc>0
@@ -79,34 +75,10 @@ augroup autocommands
 augroup end
 
 lua << EOF
-	local lspconfig = require'lspconfig'
-
-	local clangd_on_attach = function(client, bufnr)
-		local map_opts = { noremap = true, silent = true }
-		vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gh', '<cmd>ClangdSwitchSourceHeader<cr>', map_opts)
-		vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gk', '<cmd>lua vim.lsp.buf.hover()<cr>', map_opts)
-		vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', map_opts)
-		vim.api.nvim_buf_set_keymap(bufnr, 'n', 'rn', '<cmd>lua vim.lsp.buf.rename()<cr>', map_opts)
-
-		require'completion'.setup()
-	end
-
-	lspconfig.clangd.setup({ on_attach = clangd_on_attach })
-
-	-- disable diagnostics
-	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-		vim.lsp.diagnostic.on_publish_diagnostics, {
-			underline = false,
-			virtual_text = false,
-			signs = false,
-			update_in_insert = false
-		}
-	)
-
+	require'lspconfig'.clangd.setup()
 	require'treesitter'.setup()
+	require'filetree'.Setup()
 EOF
-
-command! -nargs=0 Format lua vim.lsp.buf.formatting()
 
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
@@ -147,10 +119,6 @@ let g:tagbar_sort			= 0
 
 command! -nargs=0 ShowTags call tagbar#ToggleWindow()
 
-"Theme
-let g:TransparentBackground = 1
-colo nord
-
 "NerdTree"
 nnoremap <silent> <C-N> <cmd>Tree<Return>
 let NERDTreeMinimalUI				= 1
@@ -163,7 +131,8 @@ let NERDTreeCascadeSingleChildDir	= 0
 let NERDTreeDirArrowExpandable		= "+"
 let NERDTreeDirArrowCollapsible		= "-"
 
-command! -n=? -complete=dir -bar Tree :call g:NERDTreeCreator.ToggleTabTree('<args>')
+""command! -n=? -complete=dir -bar Tree call g:NERDTreeCreator.ToggleTabTree('<args>')
+command! -n=? -complete=dir -bar Tree lua require'filetree'.Toggle()
 
 "disable garbage plugin
 let g:loaded_netrw			= 1

@@ -39,8 +39,7 @@ local function makeHoverWindow(contents, opts)
 
 	local max_width
 	if opts.align == 'right' then
-		local columns = vim.api.nvim_get_option('columns')
-		max_width = columns - opts.col - opts.width
+		max_width = vim.o.columns - opts.col - opts.width
 	else
 		max_width = opts.col - 1
 	end
@@ -121,12 +120,11 @@ local function makeHoverWindow(contents, opts)
 	-- Make the floating window.
 	local height = #stripped
 	local bufnr = vim.api.nvim_create_buf(false, true)
-	local winnr
 	local opt = getHoverWindowOptions(width, height, opts)
 
 	if opt.width <= 0 then return end
 
-	winnr = vim.api.nvim_open_win(bufnr, false, opt)
+	local winnr = vim.api.nvim_open_win(bufnr, false, opt)
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, stripped)
 	-- setup a variable for floating window, fix #223
 	vim.api.nvim_buf_set_var(bufnr, "lsp_floating", true)
@@ -221,7 +219,7 @@ function hover.autoHover()
 		-- close any existing old windows
 		if hover.winnr ~= nil and vim.api.nvim_win_is_valid(hover.winnr) then
 			vim.api.nvim_win_close(hover.winnr, true)
-			vim.api.nvim_buf_delete(hover.bufnr)
+			vim.api.nvim_buf_delete(hover.bufnr, {})
 		end
 
 		hover.winnr = nil
@@ -248,17 +246,6 @@ function hover.autoHover()
 		end
 
 		local item = items['items'][items['selected']+1]
-
-		local has_hover = false
-
-		for _, client in pairs(vim.lsp.buf_get_clients(0)) do
-			if client.resolved_capabilities.hover then
-				has_hover = true
-				break
-			end
-		end
-
-		if not has_hover then return end
 
 		local row, col = unpack(vim.api.nvim_win_get_cursor(0))
 		row = row - 1

@@ -3,7 +3,7 @@
 let g:qf_disable_statusline = 1
 
 let s:plugin_map = {
-	\ 'nerdtree': 'TREE',
+	\ 'filetree': 'TREE',
 	\ 'tagbar': 'tags',
 	\ 'vim-plug': 'Plugins',
 	\ 'fzf': 'fzf',

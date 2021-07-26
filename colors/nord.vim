@@ -74,6 +74,10 @@ let s:NordColors.NERDTreeDirSlash	= {"fg": "white", "guifg": "#5E81AC"}
 let s:NordColors.NERDTreeOpenable	= {"fg": "white", "guifg": "#8FBCBB"}
 let s:NordColors.NERDTreeClosable	= {"fg": "white", "guifg": "#8FBCBB"}
 
+let s:NordColors.FileTreeDir		= {"fg": "white", "guifg": "#71468c"}
+let s:NordColors.FileTreeDirIcon	= {"fg": "white", "guifg": "#8FBCBB"}
+let s:NordColors.FileTreeNodeDir	= {"fg": "white", "guifg": "#5E81AC"}
+
 "treesitter"
 let s:NordColors.TSNamespace	= {"fg": "white", "guifg": "#8FBCBB"}
 let s:NordColors.TSType			= {"fg": "white", "guifg": "#88C0D0"}

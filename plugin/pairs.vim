@@ -28,13 +28,7 @@ func! PairsReturn()
 	if has_key(g:Pairs, l:pair)
 		if l:line[l:cursorpos - 1] ==# g:Pairs[l:pair]
 			let l:output = "\<CR>\<CR>\<UP>\<TAB>"
-			let l:it = 0
-			let l:indent = indent(line("."))
-
-			while l:it < l:indent
-				let l:output .= "\<TAB>"
-				let l:it += shiftwidth()
-			endwhile
+			let l:output .= repeat("\<TAB>", indent(line(".")) / shiftwidth())
 
 			return l:output
 		endif
@@ -75,6 +69,17 @@ func! PairsDelete()
 	return "\<BS>"
 endfunc
 
+func! PairsTab()
+	let l:cursorpos = col(".")
+	let l:indent = indent(line(".") - 1)
+
+	if l:cursorpos ==# 1 && l:indent > 0
+		return repeat("\<TAB>", l:indent / shiftwidth())
+	endif
+
+	return "\<TAB>"
+endfunc
+
 func! PairsInit()
 	if g:PairsLoaded
 		return
@@ -92,6 +97,7 @@ func! PairsInit()
 	inoremap <expr> <SPACE> PairsSpace()
 	inoremap <expr> <BS> PairsDelete()
 	inoremap <expr> <C-H> PairsDelete()
+	inoremap <expr> <TAB> PairsTab()
 
 	let g:PairsLoaded = 1
 endfunc
