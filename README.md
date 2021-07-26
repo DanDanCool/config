@@ -4,10 +4,10 @@ my configuration for terminal + vim + various other things
 the pairs script works best with smart indent disabled
 
 # TODO:
-- rewrite nerdtree
+- finish rewriting the nerdtree menu
 - rewrite gutentags
 - rewrite tagbar
-- add keymaps to fzf.lua for more navigation options (tab split, vsplit, etc.)
+- ~~add keymaps to fzf.lua for more navigation options (tab split, vsplit, etc.)~~ rewrite fzf in lua
 - fix those errors from complete.lua
 - add the 'additional complete' items from the lsp into complete.lua
 - add fuzzy matching to complete.lua
