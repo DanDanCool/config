@@ -5,9 +5,9 @@ the pairs script works best with smart indent disabled
 
 # TODO:
 - finish rewriting the nerdtree menu
-- rewrite gutentags
 - rewrite tagbar
 - ~~add keymaps to fzf.lua for more navigation options (tab split, vsplit, etc.)~~ rewrite fzf in lua
+- refactor!!! (everything should be snake case to match the neovim style)
 - fix those errors from complete.lua
 - add the 'additional complete' items from the lsp into complete.lua
 - add fuzzy matching to complete.lua
