@@ -1,4 +1,4 @@
-"Super awesome Jolly theme! :3
+"Super eye searing theme
 
 set background=dark
 highlight clear
@@ -37,8 +37,9 @@ let s:JollyColors.Statement		= {"fg": "98", "guifg": "#9039c6"}
 let s:JollyColors.Conditional	= {"fg": "98", "guifg": "#9039c6"}
 let s:JollyColors.Repeat		= {"fg": "98", "guifg": "#9039c6"}
 let s:JollyColors.Label			= {"fg": "98", "guifg": "#9039c6"}
-let s:JollyColors.Operator		= {"fg": "white", "guifg": "#DCDCDC"}
+let s:JollyColors.Operator		= {"fg": "white", "guifg": "#5E81AC"}
 let s:JollyColors.Exception		= {"fg": "98", "guifg": "#9039c6"}
+let s:JollyColors.Delimiter		= {"fg": "white", "guifg": "#DCDCDC"}
 
 let s:JollyColors.PreProc		= {"fg":  "92", "guifg": "#9039c6"}
 let s:JollyColors.Include		= {"fg": "245", "guifg": "#9b9b9b"}
@@ -46,11 +47,8 @@ let s:JollyColors.Include		= {"fg": "245", "guifg": "#9b9b9b"}
 let s:JollyColors.Type			= {"fg": "98", "guifg": "#9039c6"}
 let s:JollyColors.Structure		= {"fg": "98", "guifg": "#9039c6"}
 
-""let s:JollyColors.Special		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
-""let s:JollyColors.Underlined	= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
-""let s:JollyColors.Ignore		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
-""let s:JollyColors.Error			= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
 let s:JollyColors.Todo			= {"fg": "white", "bg": "28", "guifg": "#1B141B", "guibg": "#4EB13E"}
+let s:JollyColors.Special		= {"fg": "98", "guifg": "#EBCB8B"}
 
 "Misc"
 let s:JollyColors.Folded		= {"fg": "white", "bg": "54", "guifg": "#dcdcdc", "guibg": "#594359"}
@@ -65,17 +63,12 @@ let s:JollyColors.StatusLine	= {"fg": "233", "guifg": "#232526", "guibg": "#2325
 let s:JollyColors.StatusLineNC	= {"fg": "233", "guifg": "#232526", "guibg": "#232526"}
 let s:JollyColors.EndOfBuffer	= {"fg":  "38", "guifg": "#232526"}
 
-"NerdTree
-let s:JollyColors.NERDTreeHelp		= {"fg": "white", "guifg": "#9b9b9b"}
-let s:JollyColors.NERDTreeUp		= {"fg": "white", "guifg": "#9b9b9b"}
-let s:JollyColors.NERDTreeCWD		= {"fg": "white", "guifg": "#9039c6"}
-let s:JollyColors.NERDTreeDir		= {"fg": "white", "guifg": "#5d5dd8"}
-let s:JollyColors.NERDTreeDirSlash	= {"fg": "white", "guifg": "#5d5dd8"}
-let s:JollyColors.NERDTreeOpenable	= {"fg": "white", "guifg": "#0089b7"}
-let s:JollyColors.NERDTreeClosable	= {"fg": "white", "guifg": "#0089b7"}
+let s:JollyColors.FileTreeDir		= {"fg": "white", "guifg": "#71468c"}
+let s:JollyColors.FileTreeDirIcon	= {"fg": "white", "guifg": "#8FBCBB"}
+let s:JollyColors.FileTreeNodeDir	= {"fg": "white", "guifg": "#5E81AC"}
 
 "treesitter"
-let s:JollyColors.TSNamespace	= {"fg": "white", "guifg": "#fbffa0"}
+let s:JollyColors.TSNamespace	= {"fg": "white", "guifg": "#EBCB8B"}
 let s:JollyColors.TSType		= {"fg": "white", "guifg": "#F92672"}
 let s:JollyColors.TSText		= {"fg": "white", "guifg": "#dcdcdc"}
 

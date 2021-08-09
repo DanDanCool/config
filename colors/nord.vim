@@ -49,8 +49,6 @@ let s:NordColors.Structure		= {"fg": "98", "guifg": "#88C0D0"}
 
 let s:NordColors.Special		= {"fg": "98", "guifg": "#EBCB8B"}
 let s:NordColors.Underlined		= {"fg": "98","guifg": "#5E81AC"}
-""let s:NordColors.Ignore		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
-""let s:NordColors.Error		= {"fg": "", "bg": "", "guifg": "#", "guibg": "#"}
 let s:NordColors.Todo			= {"fg": "white", "bg": "28", "guifg": "#D8DEE9", "guibg": "#434C5E"}
 
 "Misc"
@@ -64,15 +62,6 @@ let s:NordColors.PmenuSel		= {"fg": "white", "bg": "62", "guifg": "#E5E9F0", "gu
 let s:NordColors.StatusLine		= {"fg": "233", "guifg": "#232526", "guibg": "#232526"}
 let s:NordColors.StatusLineNC	= {"fg": "233", "guifg": "#232526", "guibg": "#232526"}
 let s:NordColors.EndOfBuffer	= {"fg":  "38", "guifg": "#3B4252"}
-
-"NerdTree
-let s:NordColors.NERDTreeHelp		= {"fg": "white", "guifg": "#3B4252"}
-let s:NordColors.NERDTreeUp			= {"fg": "white", "guifg": "#3B4252"}
-let s:NordColors.NERDTreeCWD		= {"fg": "white", "guifg": "#3B4252"}
-let s:NordColors.NERDTreeDir		= {"fg": "white", "guifg": "#5E81AC"}
-let s:NordColors.NERDTreeDirSlash	= {"fg": "white", "guifg": "#5E81AC"}
-let s:NordColors.NERDTreeOpenable	= {"fg": "white", "guifg": "#8FBCBB"}
-let s:NordColors.NERDTreeClosable	= {"fg": "white", "guifg": "#8FBCBB"}
 
 let s:NordColors.FileTreeDir		= {"fg": "white", "guifg": "#71468c"}
 let s:NordColors.FileTreeDirIcon	= {"fg": "white", "guifg": "#8FBCBB"}

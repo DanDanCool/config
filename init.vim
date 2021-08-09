@@ -1,18 +1,14 @@
 call plug#begin(stdpath('data'))
 
-Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
-""Plug 'nvim-treesitter/nvim-treesitter'
 
 call plug#end()
 
-"Theme
 let g:TransparentBackground = 1
-colo nord
+colo jolly
 
 set number
 set nowrap
-set clipboard=unnamed
 set backspace=indent,eol,start
 set noswapfile
 
@@ -25,11 +21,14 @@ set autoindent
 
 set foldmethod=indent
 set foldlevelstart=5
+set splitright
 
 set ignorecase
 set showtabline=2
 set termguicolors
 set pumheight=15
+
+set nomodeline
 
 set shada=""
 
@@ -49,10 +48,6 @@ nnoremap <S-L> <C-W><C-L>
 nnoremap <Up> <cmd>bprev<cr>
 nnoremap <Down> <cmd>bnext<cr>
 
-"move lines up and down
-inoremap <A-k> <Esc>ddkkp0i
-inoremap <A-j> <Esc>ddp0i
-
 nnoremap <silent> // <cmd>noh<Return>
 
 nmap gh <Nop>
@@ -60,11 +55,11 @@ nnoremap gk K
 
 tnoremap <Esc> <C-\><C-n>
 
+vnoremap y "+y
+vnoremap p "+p
+
 augroup autocommands
 	autocmd!
-	autocmd FileType python nnoremap <buffer> <C-/> I#<Esc>0
-	autocmd FileType c,cpp setlocal expandtab |
-				\ nnoremap <buffer> <C-/> I//<Esc>0 |
 	autocmd BufWritePre * %s/\s\+$//e
 	autocmd WinNew * silent! NERDTreeMirror | silent! NERDTreeClose
 	autocmd FileType nerdtree vnoremap <silent> <buffer> t :call tree#open_nodes('t', 1)<CR> |
@@ -75,9 +70,11 @@ augroup autocommands
 augroup end
 
 lua << EOF
-	require'lspconfig'.clangd.setup()
-	require'treesitter'.setup()
-	require'filetree'.Setup()
+	require('lspconfig').clangd.setup()
+	require('treesitter').setup()
+	require('filetree').Setup()
+	require('tags').setup()
+
 EOF
 
 set completeopt=menuone,noinsert,noselect
@@ -109,7 +106,7 @@ func! s:Rg(txt)
 	endif
 endfunc
 
-command! -nargs=* -complete=file Rg :call s:Rg(<q-args>)
+command! -nargs=* -complete=file Rg call s:Rg(<q-args>)
 
 "tagbar
 nnoremap <silent> ; <cmd>ShowTags<CR>
@@ -118,6 +115,7 @@ let g:tagbar_foldlevel		= 2
 let g:tagbar_sort			= 0
 
 command! -nargs=0 ShowTags call tagbar#ToggleWindow()
+command! Tags lua require('tags').regenerate()
 
 "NerdTree"
 nnoremap <silent> <C-N> <cmd>Tree<Return>
@@ -131,12 +129,20 @@ let NERDTreeCascadeSingleChildDir	= 0
 let NERDTreeDirArrowExpandable		= "+"
 let NERDTreeDirArrowCollapsible		= "-"
 
-""command! -n=? -complete=dir -bar Tree call g:NERDTreeCreator.ToggleTabTree('<args>')
-command! -n=? -complete=dir -bar Tree lua require'filetree'.Toggle()
+command! Tree lua require'filetree'.Toggle()
 
-"disable garbage plugin
+"disable nonsense plugins
 let g:loaded_netrw			= 1
 let g:loaded_netrwPlugin	= 1
+let g:loaded_gzip = 1
+let g:loaded_shada_plugin = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_2html_plugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_zipPlugin = 1
+let g:loaded_remote_plugins = 1
+let g:loaded_fzf = 1
 
 "FZF
 nnoremap <silent> <C-P> <cmd>lua require'fzf'.run()<Return>
