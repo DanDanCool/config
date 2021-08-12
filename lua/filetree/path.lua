@@ -24,11 +24,9 @@ function Path.CreatePathInfo(path)
 
 	if filetype == 'dir' then
 		pathInfo.isDirectory = true
-	elseif filetype == 'file' then
-		pathInfo.isDirectory = false
 	else
-		print("filetype not supported: " .. path .. " " .. filetype)
-		return nil
+		-- assume file... this might be wrong but whatever
+		pathInfo.isDirectory = false
 	end
 
 	pathInfo.flags	= ''

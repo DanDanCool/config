@@ -63,14 +63,10 @@ function OpenWindow(options)
 end
 
 function OpenSplit(options)
-	local savesplitright = vim.go.splitright
-
 	local onlyOneWin = (vim.fn.winnr('$') == 1)
 	local splitMode = 'vertical'
 
-	if onlyOneWin then
-		vim.go.splitright = 1
-	elseif options.where == 'h' then
+	if options.where == 'h' then
 		splitMode = ''
 	end
 
@@ -81,8 +77,6 @@ function OpenSplit(options)
 	-- Error: file might already be open and modified
 	vim.api.nvim_command('wincmd p')
 	vim.api.nvim_command(splitMode .. ' split')
-
-	vim.go.splitright = savesplitright
 end
 
 function PreviousWindow(options)

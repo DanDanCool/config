@@ -1,7 +1,6 @@
 "Super eye searing theme
 
 set background=dark
-highlight clear
 
 if exists("syntax_on")
 	syntax reset
@@ -47,7 +46,7 @@ let s:JollyColors.Include		= {"fg": "245", "guifg": "#9b9b9b"}
 let s:JollyColors.Type			= {"fg": "98", "guifg": "#9039c6"}
 let s:JollyColors.Structure		= {"fg": "98", "guifg": "#9039c6"}
 
-let s:JollyColors.Todo			= {"fg": "white", "bg": "28", "guifg": "#1B141B", "guibg": "#4EB13E"}
+let s:JollyColors.Todo			= {"fg": "white", "bg": "28", "guifg": "#4EB13E"}
 let s:JollyColors.Special		= {"fg": "98", "guifg": "#EBCB8B"}
 
 "Misc"

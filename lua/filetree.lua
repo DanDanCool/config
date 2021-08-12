@@ -8,10 +8,12 @@ local TreeNode	= require'filetree/tree_node'
 local Path		= require'filetree/path'
 local Config	= require'filetree/config'
 
-FileTree.WinSize = 31
+FileTree.WinSize = 30
 
-FileTree.BufID = -1
-FileTree.HlID = -1
+FileTree.BufID = nil
+FileTree.HlID = nil
+
+FileTree.Cursor = { 1, 1 }
 
 function FileTree.Render()
 	vim.api.nvim_buf_set_option(FileTree.BufID, 'modifiable', true)
@@ -24,7 +26,6 @@ function FileTree.CreateWindow()
 	vim.api.nvim_command('silent! topleft vertical new')
 
 	vim.t.FileTreeWin = vim.api.nvim_get_current_win()
-	FileTree.BufID = vim.api.nvim_create_buf(false, true)
 
 	vim.api.nvim_win_set_buf(vim.t.FileTreeWin, FileTree.BufID)
 	vim.api.nvim_win_set_width(win, FileTree.WinSize)
@@ -51,6 +52,10 @@ function FileTree.CreateWindow()
 	vim.wo.cursorline = true
 	vim.wo.statusline = '%#STLHighlight# TREE %#STLText#'
 
+	local map_opts = { noremap = true, silent = true }
+	vim.api.nvim_buf_set_keymap(FileTree.BufID, 'n', '<up>', '<nop>', map_opts)
+	vim.api.nvim_buf_set_keymap(FileTree.BufID, 'n', '<down>', '<nop>', map_opts)
+
 	vim.api.nvim_command('clearjumps')
 	vim.api.nvim_command('iabclear <buffer>')
 
@@ -58,14 +63,14 @@ function FileTree.CreateWindow()
 end
 
 function FileTree.Toggle()
-	if not vim.t.FileTreeOpen then
+	if not vim.t.FileTreeWin then
 		FileTree.CreateWindow()
 		FileTree.Render()
 
-		vim.t.FileTreeOpen = true
+		vim.api.nvim_win_set_cursor(vim.t.FileTreeWin, FileTree.Cursor)
 	else
 		FileTree.Close()
-		vim.t.FileTreeOpen = false
+		vim.t.FileTreeWin = nil
 	end
 end
 
@@ -85,6 +90,7 @@ local function FileTreeInit()
 	FileTree.Root = TreeNode.CreateNode(pathInfo)
 	TreeNode.InitChildren(FileTree.Root)
 	FileTree.Root.isOpen = true
+	FileTree.BufID = vim.api.nvim_create_buf(false, true)
 end
 
 function FileTree.Setup()
@@ -120,10 +126,11 @@ end
 
 -- Closes the tab tree window for this tab
 function FileTree.Close()
-    if not vim.t.FileTreeOpen or vim.fn.winnr('$') == 1 then
+    if not vim.t.FileTreeWin or vim.fn.winnr('$') == 1 then
         return
     end
 
+	FileTree.Cursor = vim.api.nvim_win_get_cursor(vim.t.FileTreeWin)
 	vim.api.nvim_win_close(vim.t.FileTreeWin, true)
 end
 
