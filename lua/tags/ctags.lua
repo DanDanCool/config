@@ -1,5 +1,0 @@
-local ctags = {}
-
-
-
-return ctags
