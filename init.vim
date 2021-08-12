@@ -1,12 +1,3 @@
-call plug#begin(stdpath('data'))
-
-Plug 'preservim/tagbar'
-
-call plug#end()
-
-let g:TransparentBackground = 1
-colo jolly
-
 set number
 set nowrap
 set backspace=indent,eol,start
@@ -31,6 +22,9 @@ set pumheight=15
 set nomodeline
 
 set shada=""
+
+let g:TransparentBackground = 1
+colo jolly
 
 let mapleader = "-"
 
@@ -74,7 +68,6 @@ lua << EOF
 	require('treesitter').setup()
 	require('filetree').Setup()
 	require('tags').setup()
-
 EOF
 
 set completeopt=menuone,noinsert,noselect
@@ -109,16 +102,15 @@ endfunc
 command! -nargs=* -complete=file Rg call s:Rg(<q-args>)
 
 "tagbar
-nnoremap <silent> ; <cmd>ShowTags<CR>
+nnoremap <silent> ; <cmd>lua require('tags').toggle()<cr>
 let g:tagbar_compact		= 2
 let g:tagbar_foldlevel		= 2
 let g:tagbar_sort			= 0
 
-command! -nargs=0 ShowTags call tagbar#ToggleWindow()
 command! Tags lua require('tags').regenerate()
 
 "NerdTree"
-nnoremap <silent> <C-N> <cmd>Tree<Return>
+nnoremap <silent> <C-N> <cmd>lua require('filetree').Toggle()<Return>
 let NERDTreeMinimalUI				= 1
 let NERDTreeAutoDeleteBuffer		= 1
 let NERDTreeNaturalSort				= 1
@@ -128,8 +120,6 @@ let NERDTreeShowHidden				= 1
 let NERDTreeCascadeSingleChildDir	= 0
 let NERDTreeDirArrowExpandable		= "+"
 let NERDTreeDirArrowCollapsible		= "-"
-
-command! Tree lua require'filetree'.Toggle()
 
 "disable nonsense plugins
 let g:loaded_netrw			= 1
