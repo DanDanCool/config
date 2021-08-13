@@ -68,6 +68,8 @@ lua << EOF
 	require('treesitter').setup()
 	require('filetree').Setup()
 	require('tags').setup()
+	require('pairs').setup()
+	require('statusline').setup()
 EOF
 
 set completeopt=menuone,noinsert,noselect
