@@ -1,28 +1,28 @@
 -- options
-vim.go.number = true
-vim.go.wrap = false
-vim.go.backspace = 'indent,eol,start'
-vim.go.swapfile = false
+vim.o.number = true
+vim.o.wrap = false
+vim.o.backspace = 'indent,eol,start'
+vim.o.swapfile = false
 
-vim.go.expandtab = false
-vim.go.tabstop = 4
-vim.go.softtabstop = 4
-vim.go.shiftwidth = 4
+vim.o.expandtab = false
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
 
-vim.go.autoindent = true
+vim.o.autoindent = true
 
-vim.go.foldmethod = 'indent'
-vim.go.foldlevelstart = 5
-vim.go.splitright = true
+vim.o.foldmethod = 'indent'
+vim.o.foldlevelstart = 5
+vim.o.splitright = true
 
-vim.go.ignorecase = true
-vim.go.showtabline = 2
-vim.go.termguicolors = true
-vim.go.pumheight = 15
+vim.o.ignorecase = true
+vim.o.showtabline = 2
+vim.o.termguicolors = true
+vim.o.pumheight = 15
 
-vim.go.modeline = false
+vim.o.modeline = false
 
-vim.go.shada = ''
+vim.o.shada = ''
 
 vim.g.TransparentBackground = 1
 vim.api.nvim_command('colo jolly')
@@ -66,15 +66,15 @@ require('tags').setup()
 require('pairs').setup()
 require('statusline').setup()
 
-vim.go.completeopt = 'menuone,noinsert,noselect'
-vim.go.shortmess = vim.go.shortmess .. 'c'
+vim.o.completeopt = 'menuone,noinsert,noselect'
+vim.o.shortmess = vim.go.shortmess .. 'c'
 
 vim.api.nvim_set_keymap('i', '<c-p>', '<cmd>lua require("completion").triggerCompletion()<cr>', map_opt)
 vim.api.nvim_set_keymap('i', '<c-n>', '<cmd>lua require("completion").triggerCompletion()<cr>', map_opt)
 
 -- ripgrep
-vim.go.grepprg = 'rg --vimgrep'
-vim.go.grepformat = '%f:%l:%c:%m'
+vim.o.grepprg = 'rg --vimgrep'
+vim.o.grepformat = '%f:%l:%c:%m'
 
 function ripgrep(txt)
 	vim.api.nvim_command('grep! ' .. txt)
