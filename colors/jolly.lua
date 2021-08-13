@@ -42,7 +42,7 @@ JollyColors.Include		= {fg ="245", guifg = "#9b9b9b"}
 JollyColors.Type		= {fg = "98", guifg = "#9039c6"}
 JollyColors.Structure	= {fg = "98", guifg = "#9039c6"}
 
-JollyColors.Todo		= {fg = "white", guifg = "#4EB13E"}
+JollyColors.Todo		= {fg = "green", bg = 'NONE', guifg = '#4EB13E', guibg = "#NONE"}
 JollyColors.Special		= {fg = "98", guifg = "#EBCB8B"}
 
 -- Misc
