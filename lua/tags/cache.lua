@@ -54,6 +54,8 @@ end
 
 function cache.current_updated()
 	local info = cache.current
+	if not info then return false end
+
 	return info.ftime ~= vim.fn.getftime(info.fname) or not info.tags
 end
 

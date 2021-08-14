@@ -77,6 +77,7 @@ vim.opt.grepprg = 'rg --vimgrep'
 vim.opt.grepformat = '%f:%l:%c:%m'
 
 function ripgrep(txt)
+	print(txt)
 	vim.api.nvim_command('grep! ' .. txt)
 
 	if #vim.fn.getqflist() then
@@ -87,7 +88,7 @@ function ripgrep(txt)
 	end
 end
 
-vim.api.nvim_command('command! -nargs=* Rg v:lua.ripgrep(<q-args>)')
+vim.api.nvim_command('command! -nargs=* Rg call v:lua.ripgrep(<q-args>)')
 
 -- tagbar
 vim.api.nvim_set_keymap('n', ';', '<cmd>lua require("tags").toggle()<cr>', map_opt)

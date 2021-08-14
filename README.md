@@ -1,12 +1,9 @@
 # config
-my configuration for terminal + vim + various other things
-
-the pairs script works best with smart indent disabled
+configuration for neovim, requires version 0.5
 
 # TODO:
 - finish rewriting the nerdtree menu
-- rewrite tagbar
-- ~~add keymaps to fzf.lua for more navigation options (tab split, vsplit, etc.)~~ rewrite fzf in lua
+- rewrite fzf
 - refactor!!! (everything should be snake case to match the neovim style)
 - fix those errors from complete.lua
 - add the 'additional complete' items from the lsp into complete.lua
@@ -29,9 +26,3 @@ https://github.com/nvim-lua/completion-nvim
 Treesitter:
 https://github.com/nvim-treesitter/nvim-treesitter
 
-# Notes:
-Completion: will probably not work with snippets, only gets completion items from lsp. This is a cut down version of the plugin.
-
-Treesitter: this only provides highlighting functionality, everything else was cut. In addition, this does not support the 'is?' predicate
-
-There are probably a dozen license incompabilities... oh well
