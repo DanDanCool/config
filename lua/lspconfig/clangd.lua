@@ -20,7 +20,7 @@ local function clangd_on_attach(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', map_opts)
 	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'rn', '<cmd>lua vim.lsp.buf.rename()<cr>', map_opts)
 
-	require'completion'.setup()
+	--require'completion'.setup()
 end
 
 local root_pattern = util.root_pattern("compile_commands.json", "compile_flags.txt", ".git")

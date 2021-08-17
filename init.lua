@@ -59,12 +59,14 @@ vim.api.nvim_command('	autocmd BufWritePre * %s/\\s\\+$//e')
 vim.api.nvim_command('	autocmd TermOpen * setlocal nonumber')
 vim.api.nvim_command('augroup end')
 
+-- plugins
 require('lspconfig').clangd.setup()
 require('treesitter').setup()
 require('filetree').Setup()
 require('tags').setup()
 require('pairs').setup()
 require('statusline').setup()
+require('fzf').setup()
 
 vim.opt.completeopt = 'menuone,noinsert,noselect'
 vim.opt.shortmess = vim.opt.shortmess + 'c'

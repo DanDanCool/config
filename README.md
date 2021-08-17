@@ -3,7 +3,6 @@ configuration for neovim, requires version 0.5
 
 # TODO:
 - finish rewriting the nerdtree menu
-- rewrite fzf
 - refactor!!! (everything should be snake case to match the neovim style)
 - fix those errors from complete.lua
 - add the 'additional complete' items from the lsp into complete.lua
