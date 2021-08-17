@@ -226,7 +226,8 @@ function hover.autoHover()
 		return
 	end
 
-	local items = vim.api.nvim_call_function('complete_info', {{"eval", "selected", "items", "user_data"}})
+	print('hover')
+	local items = vim.fn.complete_info({"eval", "selected", "items", "user_data"})
 
 	if items['selected'] ~= state.selected then
 		state.textHover = true

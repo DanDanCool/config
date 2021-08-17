@@ -37,6 +37,7 @@ end
 
 function complete.autoComplete()
 	if vim.lsp.buf_get_clients(0) == nil then return end
+	print('complete')
 
 	local position_param = vim.lsp.util.make_position_params()
 

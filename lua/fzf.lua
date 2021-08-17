@@ -75,7 +75,7 @@ function fzf.create_win()
 	fzf.prompt.win = vim.api.nvim_open_win(fzf.prompt.buf, true, opts)
 	fzf.prompt.tick = vim.api.nvim_buf_get_changedtick(fzf.prompt.buf)
 
-	fzf.selection = 40
+	fzf.selection = 0
 	fzf.selected = ''
 
 	vim.wo.statusline = '%#STLText# fzf'
@@ -101,12 +101,19 @@ end
 function fzf.render(lines)
 	local output = {}
 
-	local len = tonumber(lines.len) - 1
-	for i = 0, len do
+	local height = vim.api.nvim_win_get_height(fzf.results.win)
+	local len = tonumber(lines.len)
+
+	for i = 1, height - len do
+		table.insert(output, '')
+	end
+
+	local start = math.max(len - height, 0)
+	for i = start, len - 1 do
 		local prefix = '  '
 		local str = lines.results[i]
 
-		if i == fzf.selection - 1 then
+		if i == len - fzf.selection - 1 then
 			prefix = '> '
 			fzf.selected = ffi.string(str.str, str.len)
 		end
@@ -129,7 +136,7 @@ function fzf.run()
 		if tick == fzf.prompt.tick then	return end
 
 		local lines = vim.api.nvim_buf_get_lines(fzf.prompt.buf, 0, 1, false)
-		local input = string.sub(lines[1], 2)
+		local input = string.sub(lines[1], 3)
 
 		if vim.api.nvim_buf_line_count(fzf.prompt.buf) > 1 then
 			vim.api.nvim_buf_set_lines(fzf.prompt.buf, 0, -1, false, {})

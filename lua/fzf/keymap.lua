@@ -16,13 +16,13 @@ function keymap.bind(buf)
 end
 
 function keymap.up()
-	fzf.selection = fzf.selection - 1
-	if (fzf.selection < 1) then fzf.selection = 1 end
+	fzf.selection = fzf.selection + 1
+	if (fzf.selection > 40) then fzf.selection = 40 end
 end
 
 function keymap.down()
-	fzf.selection = fzf.selection + 1
-	if (fzf.selection > 40) then fzf.selection = 40 end
+	fzf.selection = fzf.selection - 1
+	if (fzf.selection < 0) then fzf.selection = 0 end
 end
 
 function keymap.enter()
