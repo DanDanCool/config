@@ -29,9 +29,9 @@ vim.api.nvim_command('colo jolly')
 
 local map_opt = { noremap = true, silent = true }
 
-if vim.fn.has('win32') then
+if vim.fn.has('win32') == 1 then
 	-- AAAAAAGGGGGHHHHH
-	vim.api.nvim_set_keymap('n', '<c-z', '<nop>', map_opt)
+	vim.api.nvim_set_keymap('n', '<c-z>', '<nop>', map_opt)
 end
 
 -- Split navigation"

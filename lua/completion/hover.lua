@@ -126,8 +126,6 @@ local function makeHoverWindow(contents, opts)
 
 	local winnr = vim.api.nvim_open_win(bufnr, false, opt)
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, stripped)
-	-- setup a variable for floating window, fix #223
-	vim.api.nvim_buf_set_var(bufnr, "lsp_floating", true)
 
 	local cwin = vim.api.nvim_get_current_win()
 	vim.api.nvim_set_current_win(winnr)
@@ -235,7 +233,7 @@ function hover.autoHover()
 		-- close any existing old windows
 		if hover.winnr ~= nil and vim.api.nvim_win_is_valid(hover.winnr) then
 			vim.api.nvim_win_close(hover.winnr, true)
-			vim.api.nvim_buf_delete(hover.bufnr)
+			vim.api.nvim_buf_delete(hover.bufnr { force = true })
 		end
 
 		hover.winnr = nil
