@@ -130,6 +130,11 @@ function fzf.run()
 
 		local lines = vim.api.nvim_buf_get_lines(fzf.prompt.buf, 0, 1, false)
 		local input = string.sub(lines[1], 2)
+
+		if vim.api.nvim_buf_line_count(fzf.prompt.buf) > 1 then
+			vim.api.nvim_buf_set_lines(fzf.prompt.buf, 0, -1, false, {})
+		end
+
 		local output = fzf.get_results(input)
 		fzf.render(output)
 	end))
