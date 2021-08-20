@@ -93,13 +93,37 @@ function KeyMap.SetMaps()
 		vim.api.nvim_win_set_cursor(vim.t.FileTreeWin, { node.parent.ln, 0 })
 	end	})
 
-    KeyMap.Create({ key = 't', scope = 'Node', callback = function(node)
+    KeyMap.Create({ key = 't', scope = 'FileNode', callback = function(node)
 		Opener.Open(node, {where = 't', keepopen = 1})
 	end	})
 
-    KeyMap.Create({ key = 'T', scope = 'Node', callback =  function(node)
+    KeyMap.Create({ key = 'T', scope = 'FileNode', callback =  function(node)
 		Opener.Open(node, {where = 't', keepopen = 1, stay = 1})
 	end	})
+
+	KeyMap.Create({ key = 'n', scope = 'FileNode', callback = function(node)
+		local parent = node.parent
+		local path = vim.fn.input('file/directory: ', parent.pathInfo.path, 'file')
+
+		if path:sub(#path, #path) == '/' then
+			vim.fn.mkdir(path, 'p')
+		else
+			vim.api.nvim_command('wincmd p')
+			vim.api.nvim_command('edit ' .. path)
+		end
+
+	end })
+
+	KeyMap.Create({ key = 'n', scope = 'DirNode', callback = function(node)
+		local path = vim.fn.input('file/directory: ', node.pathInfo.path, 'file')
+
+		if path:sub(#path, #path) == '/' then
+			vim.fn.mkdir(path, 'p')
+		else
+			vim.api.nvim_command('wincmd p')
+			vim.api.nvim_command('edit ' .. path)
+		end
+	end })
 end
 
 return KeyMap

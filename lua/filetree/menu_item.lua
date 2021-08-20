@@ -225,17 +225,15 @@ function NERDTreeAddNode()
 	let parentNode = b:NERDTree.root.findNode(newPath.getParent())
 
 	let newTreeNode = g:NERDTreeFileNode.New(newPath, b:NERDTree)
-	" Emptying g:NERDTreeOldSortOrder forces the sort to
-	" recalculate the cached sortKey so nodes sort correctly.
-	let g:NERDTreeOldSortOrder = []
-	if empty(parentNode)
+
+	if empty(parentNode) then
 		call b:NERDTree.root.refresh()
 		call b:NERDTree.render()
-	elseif parentNode.isOpen || !empty(parentNode.children)
+	elseif parentNode.isOpen || !empty(parentNode.children) then
 		call parentNode.addChild(newTreeNode, 1)
 		call NERDTreeRender()
 		call newTreeNode.putCursorHere(1, 0)
-	endif
+	end
 
 	redraw!
 end

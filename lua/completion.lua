@@ -25,7 +25,7 @@ function completion.insertEnter()
 		end
 
 		-- closing timer if leaving insert mode
-		if state.insertLeave == true then
+		if state.insertLeave then
 			timer:stop()
 			timer:close()
 		end

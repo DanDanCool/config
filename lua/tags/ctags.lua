@@ -85,6 +85,7 @@ end
 
 function ctags.ParseOutput(output)
 	local parsed_tags = ctags.new_struct()
+	tag_info.scope = ctags.new_tag()
 
 	for _, line in ipairs(output) do
 		ctags.ParseTagline(line, parsed_tags)
