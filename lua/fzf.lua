@@ -19,8 +19,9 @@ ffi.cdef[[
 		size_t len;
 	} fzf_output;
 
-	void fzf_setup(char** ignore, int len);
-	fzf_output fzf_get_output(fzf_string* input);
+	void fzf_init(char** ignore, int len);
+	void fzf_start(fzf_string* prompt);
+	fzf_output fzf_get_output();
 	int fzf_char_match(fzf_string* s1, fzf_string* s2);
 	int fzf_fuzzy_match(fzf_string* s1, fzf_string* s2);
 ]]
@@ -35,22 +36,10 @@ function fzf.setup()
 	ignore[0] = ffi.new('char[?]', #'./.git')
 	ffi.copy(ignore[0], './.git')
 
-	ignore[1] = ffi.new('char[?]', #'./bin')
-	ffi.copy(ignore[1], './bin')
+	ignore[1] = ffi.new('char[?]', #'./build')
+	ffi.copy(ignore[1], './build')
 
-	lib.fzf_setup(ignore, 2)
-end
-
-function fzf.get_results(input)
-	input = string.lower(input)
-
-	local prompt = ffi.new('fzf_string[?]', 1)
-	prompt[0].str = ffi.new('char[?]', #input + 1)
-	ffi.copy(prompt[0].str, input)
-	prompt[0].len = #input
-
-	local output = lib.fzf_get_output(prompt)
-	return output
+	lib.fzf_init(ignore, 2)
 end
 
 function fzf.create_win()
@@ -98,30 +87,32 @@ function fzf.close()
 	vim.api.nvim_input('<esc>')
 end
 
-function fzf.render(lines)
-	local output = {}
+function fzf.render()
+	local lines = {}
+	local output = lib.fzf_get_output()
 
 	local height = vim.api.nvim_win_get_height(fzf.results.win)
-	local len = tonumber(lines.len)
+	local len = tonumber(output.len)
+	if len == 0 then return end
 
 	for i = 1, height - len do
-		table.insert(output, '')
+		table.insert(lines, '')
 	end
 
 	local start = math.max(len - height, 0)
 	for i = start, len - 1 do
 		local prefix = '  '
-		local str = lines.results[i]
+		local str = output.results[i]
 
 		if i == len - fzf.selection - 1 then
 			prefix = '> '
 			fzf.selected = ffi.string(str.str, str.len)
 		end
 
-		table.insert(output, prefix .. ffi.string(str.str, str.len))
+		table.insert(lines, prefix .. ffi.string(str.str, str.len))
 	end
 
-	vim.api.nvim_buf_set_lines(fzf.results.buf, 0, -1, false, output)
+	vim.api.nvim_buf_set_lines(fzf.results.buf, 0, -1, false, lines)
 end
 
 function fzf.run()
@@ -131,19 +122,27 @@ function fzf.run()
 	fzf.create_win()
 
 	local timer = vim.loop.new_timer()
-	timer:start(100, 100, vim.schedule_wrap(function()
+	timer:start(100, 50, vim.schedule_wrap(function()
 		local tick = vim.api.nvim_buf_get_changedtick(fzf.prompt.buf)
-		if tick == fzf.prompt.tick then	return end
+		if tick ~= fzf.prompt.tick then
+			fzf.prompt.tick = tick
 
-		local lines = vim.api.nvim_buf_get_lines(fzf.prompt.buf, 0, 1, false)
-		local input = string.sub(lines[1], 3)
+			local lines = vim.api.nvim_buf_get_lines(fzf.prompt.buf, 0, 1, false)
+			local input = string.sub(lines[1], 3):lower()
+			local prompt = ffi.new('fzf_string[?]', 1)
+
+			prompt[0].str = ffi.new('char[?]', #input + 1)
+			ffi.copy(prompt[0].str, input)
+			prompt[0].len = #input
+
+			lib.fzf_start(prompt)
+		end
 
 		if vim.api.nvim_buf_line_count(fzf.prompt.buf) > 1 then
 			vim.api.nvim_buf_set_lines(fzf.prompt.buf, 0, -1, false, {})
 		end
 
-		local output = fzf.get_results(input)
-		fzf.render(output)
+		fzf.render()
 	end))
 
 	vim.api.nvim_buf_attach(fzf.prompt.buf, false, {
