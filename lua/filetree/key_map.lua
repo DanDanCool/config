@@ -79,10 +79,15 @@ function KeyMap.SetMaps()
 
     KeyMap.Create({ key = 'CD', scope = 'all', callback = FileTree.CWD })
 
-    KeyMap.Create({ key = 'r', scope = 'all', callback = function()
+    KeyMap.Create({ key = 'R', scope = 'all', callback = function()
 		TreeNode.Refresh(FileTree.Root)
 		FileTree.Render()
 	end	})
+
+	KeyMap.Create({ key = 'r', scope = 'DirNode', callback = function(node)
+		TreeNode.Refresh(node)
+		FileTree.Render()
+	end })
 
     KeyMap.Create({ key = 'm', scope = 'Node', callback = function(node)
 		local mc = FileTree.MenuController.New(FileTree.MenuItem.AllEnabled())
