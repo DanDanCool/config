@@ -79,7 +79,6 @@ vim.opt.grepprg = 'rg --vimgrep'
 vim.opt.grepformat = '%f:%l:%c:%m'
 
 function ripgrep(txt)
-	print(txt)
 	vim.api.nvim_command('grep! ' .. txt)
 
 	if #vim.fn.getqflist() then

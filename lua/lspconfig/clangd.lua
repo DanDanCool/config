@@ -13,12 +13,14 @@ local function switch_source_header()
 	end)
 end
 
-local function clangd_on_attach(client, bufnr)
+local function clangd_on_attach(client, buf)
 	local map_opts = { noremap = true, silent = true }
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gh', '<cmd>ClangdSwitchSourceHeader<cr>', map_opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gk', '<cmd>lua vim.lsp.buf.hover()<cr>', map_opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', map_opts)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', 'rn', '<cmd>lua vim.lsp.buf.rename()<cr>', map_opts)
+	vim.api.nvim_buf_set_keymap(buf, 'n', 'gh', '<cmd>ClangdSwitchSourceHeader<cr>', map_opts)
+	vim.api.nvim_buf_set_keymap(buf, 'n', 'gk', '<cmd>lua vim.lsp.buf.hover()<cr>', map_opts)
+	vim.api.nvim_buf_set_keymap(buf, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', map_opts)
+	vim.api.nvim_buf_set_keymap(buf, 'n', 'gr', '<cmd>lua vim.lsp.buf.rename()<cr>', map_opts)
+
+	vim.api.nvim_buf_set_option(buf, 'expandtab', true)
 
 	require('completion').setup()
 end
