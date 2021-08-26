@@ -113,3 +113,6 @@ vim.g.loaded_tutor_mode_plugin	= 1
 
 -- FZF
 vim.api.nvim_set_keymap('n', '<c-p>', '<cmd>lua require("fzf").run()<cr>', map_opt)
+
+vim.g.c_no_curly_error = 1
+vim.g.c_no_bracket_error = 1

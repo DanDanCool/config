@@ -97,29 +97,27 @@ hlmap["type.builtin"] = "TSTypeBuiltin"
 hlmap["variable"] = "TSVariable"
 hlmap["variable.builtin"] = "TSVariableBuiltin"
 
+local langs = {
+	c = true,
+	cpp = true,
+	lua = true
+}
+
 function highlight.attach()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local lang = vim.api.nvim_buf_get_option(bufnr, "ft")
-	local parser = ts.get_parser(bufnr, lang)
+	local buf = vim.api.nvim_get_current_buf()
+	local lang = vim.api.nvim_buf_get_option(buf, 'ft')
 
-	local highlighter = ts.highlighter.new(parser, {})
-
-	vim.api.nvim_buf_attach(bufnr, false, { on_detach = function()
-		highlighter:destroy()
-	end })
-end
-
-function highlight.setup(config)
-	vim.api.nvim_command("augroup ts_highlight")
-	vim.api.nvim_command("autocmd!")
-
-	for parser, enable in pairs(config) do
-		if enable then
-			vim.api.nvim_command(string.format("autocmd Filetype %s lua require'treesitter.highlight'.attach()", parser))
-		end
+	if not langs[lang] then
+		return
 	end
 
-	vim.api.nvim_command("augroup end")
+	local parser = ts.get_parser(buf, lang)
+	local highlighter = ts.highlighter.new(parser, {})
+	vim.api.nvim_command("syntax off")
+
+	vim.api.nvim_buf_attach(buf, false, { on_detach = function()
+		highlighter:destroy()
+	end })
 end
 
 return highlight

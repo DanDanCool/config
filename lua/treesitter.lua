@@ -1,18 +1,9 @@
-local highlight = require'treesitter.highlight'
+local highlight = require('treesitter.highlight')
 
 -- Registers all query predicates
-require"treesitter.query_predicates"
+require('treesitter.query_predicates')
 
 local treesitter = {}
-
-treesitter.parser_config = {
-	cpp		= true,
-	c		= true,
-	lua		= true,
---	python	= true,
---	query	= true
-	java	= true
-}
 
 local function setupHighlightGroups()
 	vim.cmd('highlight default link TSNone Normal')
@@ -84,7 +75,10 @@ end
 
 function treesitter.setup()
 	setupHighlightGroups()
-	highlight.setup(treesitter.parser_config)
+	vim.api.nvim_command('augroup ts_highlight')
+	vim.api.nvim_command('autocmd!')
+	vim.api.nvim_command('autocmd FileType * lua require("treesitter.highlight").attach()')
+	vim.api.nvim_command('augroup end')
 end
 
 return treesitter
