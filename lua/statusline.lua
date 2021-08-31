@@ -148,11 +148,14 @@ function statusline.statusline()
 end
 
 function statusline.tabline()
-	local tabline = '  '
+	local tabs = vim.api.nvim_list_tabpages()
 	local current = vim.api.nvim_get_current_tabpage()
 	local prev = current
 
-	for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+	local tabline = '  '
+	if (current ~= tabs[1]) then tabline = tabline .. '' end
+
+	for _, tab in ipairs(tabs) do
 		local sep = ''
 
 		if tab == current then

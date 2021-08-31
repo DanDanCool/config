@@ -108,7 +108,7 @@ function KeyMap.SetMaps()
 
 	KeyMap.Create({ key = 'n', scope = 'FileNode', callback = function(node)
 		local parent = node.parent
-		local path = vim.fn.input('file/directory: ', parent.pathInfo.path, 'file')
+		local path = vim.fn.input('file/directory: ', parent.pathInfo.path .. '/', 'file')
 
 		if path:sub(#path, #path) == '/' then
 			vim.fn.mkdir(path, 'p')
@@ -120,7 +120,7 @@ function KeyMap.SetMaps()
 	end })
 
 	KeyMap.Create({ key = 'n', scope = 'DirNode', callback = function(node)
-		local path = vim.fn.input('file/directory: ', node.pathInfo.path, 'file')
+		local path = vim.fn.input('file/directory: ', node.pathInfo.path .. '/', 'file')
 
 		if path:sub(#path, #path) == '/' then
 			vim.fn.mkdir(path, 'p')
