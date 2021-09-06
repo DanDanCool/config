@@ -55,6 +55,7 @@ vim.api.nvim_set_keymap('v', 'p', '"+p', map_opt)
 
 vim.api.nvim_command('augroup autocommands')
 vim.api.nvim_command('	autocmd!')
+vim.api.nvim_command('	autocmd! BufNewFile, BufRead *.vert, *.tesc, *.glsl, *.geom, *.frag set filetype=glsl')
 vim.api.nvim_command('	autocmd BufWritePre * %s/\\s\\+$//e')
 vim.api.nvim_command('	autocmd TermOpen * setlocal nonumber')
 vim.api.nvim_command('augroup end')
