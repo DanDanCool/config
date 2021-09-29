@@ -1,4 +1,5 @@
 -- options
+vim.opt.relativenumber = true
 vim.opt.number = true
 vim.opt.wrap = false
 vim.opt.backspace = 'indent,eol,start'
@@ -10,6 +11,7 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 
 vim.opt.autoindent = true
+vim.opt.textwidth = 120
 
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevelstart = 5

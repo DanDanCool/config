@@ -100,7 +100,8 @@ hlmap["variable.builtin"] = "TSVariableBuiltin"
 local langs = {
 	c = true,
 	cpp = true,
-	lua = true
+	lua = true,
+	python = true
 }
 
 function highlight.attach()
