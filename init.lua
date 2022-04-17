@@ -31,8 +31,8 @@ vim.api.nvim_command('colo jolly')
 
 local map_opt = { noremap = true, silent = true }
 
+-- AAAAAAGGGGGHHHHH
 if vim.fn.has('win32') == 1 then
-	-- AAAAAAGGGGGHHHHH
 	vim.api.nvim_set_keymap('n', '<c-z>', '<nop>', map_opt)
 end
 
@@ -69,29 +69,13 @@ require('tags').setup()
 require('pairs').setup()
 require('statusline').setup()
 require('fzf').setup()
+require('ripgrep').setup()
 
 vim.opt.completeopt = 'menuone,noinsert,noselect'
 vim.opt.shortmess = vim.opt.shortmess + 'c'
 
 vim.api.nvim_set_keymap('i', '<c-p>', '<cmd>lua require("completion").triggerCompletion()<cr>', map_opt)
 vim.api.nvim_set_keymap('i', '<c-n>', '<cmd>lua require("completion").triggerCompletion()<cr>', map_opt)
-
--- ripgrep
-vim.opt.grepprg = 'rg --vimgrep'
-vim.opt.grepformat = '%f:%l:%c:%m'
-
-function ripgrep(txt)
-	vim.api.nvim_command('grep! ' .. txt)
-
-	if #vim.fn.getqflist() then
-		vim.api.nvim_command('botright copen | redraw!')
-	else
-		vim.api.nvim_command('cclose | redraw!')
-		print('No match found for ' .. txt)
-	end
-end
-
-vim.api.nvim_command('command! -nargs=* Rg call v:lua.ripgrep(<q-args>)')
 
 -- tagbar
 vim.api.nvim_set_keymap('n', ';', '<cmd>lua require("tags").toggle()<cr>', map_opt)

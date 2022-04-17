@@ -101,7 +101,8 @@ local langs = {
 	c = true,
 	cpp = true,
 	lua = true,
-	python = true
+	python = true,
+	java = true
 }
 
 function highlight.attach()

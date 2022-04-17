@@ -5,11 +5,11 @@ local util = require 'lspconfig/util'
 local function switch_source_header()
 	local params = { uri = vim.uri_from_bufnr(0) }
 
-	vim.lsp.buf_request(bufnr, 'textDocument/switchSourceHeader', params, function(err, _, result)
+	vim.lsp.buf_request(0, 'textDocument/switchSourceHeader', params, function(err, result)
 		if err then error(tostring(err)) end
 		if not result then print ("Corresponding file can’t be determined") return end
 
-		vim.api.nvim_command('edit '..vim.uri_to_fname(result))
+		vim.api.nvim_command('edit ' .. vim.uri_to_fname(result))
 	end)
 end
 
@@ -19,6 +19,8 @@ local function clangd_on_attach(client, buf)
 	vim.api.nvim_buf_set_keymap(buf, 'n', 'gk', '<cmd>lua vim.lsp.buf.hover()<cr>', map_opts)
 	vim.api.nvim_buf_set_keymap(buf, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', map_opts)
 	vim.api.nvim_buf_set_keymap(buf, 'n', 'gr', '<cmd>lua vim.lsp.buf.rename()<cr>', map_opts)
+	vim.api.nvim_buf_set_keymap(buf, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', map_opts)
+	vim.api.nvim_buf_set_keymap(buf, 'n', 'g;', '<cmd>lua vim.lsp.buf.document_symbol()<cr>', map_opts)
 
 	vim.api.nvim_buf_set_option(buf, 'expandtab', true)
 

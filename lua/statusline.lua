@@ -114,7 +114,7 @@ local function filename()
 	local filename = '%#' .. highlight .. '# %t '
 
 	local modified = ''
-	if vim.b.modified then modified = '+' end
+	if vim.api.nvim_buf_get_option(0, 'modified') then modified = '+' end
 
 	return filename .. modified
 end
