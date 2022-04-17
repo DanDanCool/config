@@ -83,11 +83,11 @@ function PreviousWindow(options)
 	local prevUsable = true
 
 	local winid = vim.fn.win_getid(vim.fn.winnr('#'))
-	local buf = vim.api.nvim_win_get_buf(prevwin)
+	local buf = vim.api.nvim_win_get_buf(winid)
 
 	-- if its a special window e.g. quickfix or another explorer plugin then we have to split
 	if vim.api.nvim_buf_get_option(buf, 'buftype') ~= ''
-		or vim.api.nvim_win_get_option(prevwin, 'previewwindow')
+		or vim.api.nvim_win_get_option(winid, 'previewwindow')
 		or (vim.api.nvim_buf_get_option(buf, 'modified') and not vim.g.hidden)
 		or vim.fn.winnr('$') == 1 then
 		prevUsable = false
