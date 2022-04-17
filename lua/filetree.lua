@@ -28,7 +28,7 @@ function FileTree.CreateWindow()
 	vim.t.FileTreeWin = vim.api.nvim_get_current_win()
 
 	vim.api.nvim_win_set_buf(vim.t.FileTreeWin, FileTree.BufID)
-	vim.api.nvim_win_set_width(win, FileTree.WinSize)
+	vim.api.nvim_win_set_width(vim.t.FileTreeWin, FileTree.WinSize)
 
 	vim.wo.winfixwidth = true
 
