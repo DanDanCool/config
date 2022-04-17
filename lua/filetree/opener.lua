@@ -106,7 +106,7 @@ function PreviousWindow(options)
 		end
 	end
 
-	if not vim.api.nvim_win_is_valid(firstwin) then
+	if not vim.api.nvim_win_is_valid(winid) then
 		OpenSplit(options)
 	else
 		vim.api.nvim_set_current_win(winid)
