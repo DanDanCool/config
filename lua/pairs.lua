@@ -73,6 +73,26 @@ function autopairs.delete()
 	return vim.api.nvim_replace_termcodes(output, true, false, true)
 end
 
+function autopairs.ctrlw()
+	local cursor = vim.api.nvim_win_get_cursor(0)
+	local line = vim.api.nvim_get_current_line()
+	local pair = string.sub(line, cursor[2], cursor[2])
+	local char = string.sub(line, cursor[2] + 1, cursor[2] + 1)
+
+	local output = '<c-w>'
+
+	if char == autopairs.pair[pair] then
+		if pair == ' ' then
+			print("space")
+			output = '<right><bs>'
+		else
+			output = '<right><bs><bs>'
+		end
+	end
+
+	return vim.api.nvim_replace_termcodes(output, true, false, true)
+end
+
 function autopairs.tab()
 	local cursor = vim.api.nvim_win_get_cursor(0)
 	local indent = vim.fn.indent(cursor[1] - 1) / vim.fn.shiftwidth()
@@ -98,6 +118,7 @@ function autopairs.setup()
 	vim.api.nvim_set_keymap('i', '<cr>', 'v:lua.autopairs.enter()', map_opt)
 	vim.api.nvim_set_keymap('i', '<space>', 'v:lua.autopairs.space()', map_opt)
 	vim.api.nvim_set_keymap('i', '<bs>', 'v:lua.autopairs.delete()', map_opt)
+	vim.api.nvim_set_keymap('i', '<c-w>', 'v:lua.autopairs.ctrlw()', map_opt)
 	vim.api.nvim_set_keymap('i', '<tab>', 'v:lua.autopairs.tab()', map_opt)
 end
 

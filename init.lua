@@ -27,7 +27,7 @@ vim.opt.modeline = false
 vim.opt.shada = ''
 
 vim.g.TransparentBackground = 1
-vim.api.nvim_command('colo jolly')
+vim.api.nvim_command('colo nord')
 
 local map_opt = { noremap = true, silent = true }
 
@@ -62,14 +62,14 @@ vim.api.nvim_command('	autocmd TermOpen * setlocal nonumber')
 vim.api.nvim_command('augroup end')
 
 -- plugins
-require('lspconfig').clangd.setup()
-require('treesitter').setup()
+-- require('lspconfig').clangd.setup()
+-- require('treesitter').setup()
 require('filetree').Setup()
-require('tags').setup()
+-- require('tags').setup()
 require('pairs').setup()
 require('statusline').setup()
-require('fzf').setup()
-require('ripgrep').setup()
+-- require('fzf').setup()
+-- require('ripgrep').setup()
 
 vim.opt.completeopt = 'menuone,noinsert,noselect'
 vim.opt.shortmess = vim.opt.shortmess + 'c'
@@ -78,7 +78,7 @@ vim.api.nvim_set_keymap('i', '<c-p>', '<cmd>lua require("completion").triggerCom
 vim.api.nvim_set_keymap('i', '<c-n>', '<cmd>lua require("completion").triggerCompletion()<cr>', map_opt)
 
 -- tagbar
-vim.api.nvim_set_keymap('n', ';', '<cmd>lua require("tags").toggle()<cr>', map_opt)
+-- vim.api.nvim_set_keymap('n', ';', '<cmd>lua require("tags").toggle()<cr>', map_opt)
 vim.api.nvim_command('command! Tags lua require("tags").regenerate()')
 
 -- NerdTree"

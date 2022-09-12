@@ -2,8 +2,8 @@ setlocal conceallevel=2
 
 syntax keyword TextTodo TODO NOTE IMPORTANT
 
-syntax keyword TextMonth January February March April May June
-syntax keyword TextMonth July August September November December
+syntax keyword TextMonth JANUARY FEBRUARY MARCH APRIL MAY JUNE
+syntax keyword TextMonth JULY AUGUST SEPTEMBER NOVEMBER DECEMBER
 
 syntax keyword TextAssignment ASSIGNMENT
 
