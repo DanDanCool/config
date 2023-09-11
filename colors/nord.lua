@@ -11,13 +11,14 @@ vim.g.colors_name = "nord"
 local NordColors = {}
 
 NordColors.Normal	= {fg = "white", guifg = "#D8DEE9"}
+NordColors.Conceal	= {fg = "white", guifg = "#D8DEE9", bg = "NONE", guibg = "NONE"}
 NordColors.VertSplit = {cterm = "NONE", fg = "38", bg = "NONE", gui = "NONE", guifg = "#2E3440", guibg = "NONE"}
 
 --NordColors.Normal	= {"fg": "white", "bg": "black", "guifg": "#E5E9F0", "guibg": "#1c1f26"}
 --NordColors.VertSplit = {"fg": "38", "bg": "38", "guifg": "#1c1f26", "guibg": "#2E3440"}
 
 -- syntax
-NordColors.Comment		= {fg = "71", guifg = "#2E3440"}
+NordColors.Comment		= {fg = "71", guifg = "#899bbf"}
 
 NordColors.Constant		= {fg = "white", guifg = "#71468c"}
 NordColors.String		= {fg = "197", guifg = "#A3BE8C"}
@@ -37,8 +38,8 @@ NordColors.Operator		= {fg = "white", guifg = "#5E81AC"}
 NordColors.Delimiter	= {fg = "white", guifg = "#D8DEE9"}
 NordColors.Exception	= {fg = "98", guifg = "#88C0D0"}
 
-NordColors.PreProc		= {fg =  "92", guifg = "#2E3440"}
-NordColors.Include		= {fg = "245", guifg = "#2E3440"}
+NordColors.PreProc		= {fg =  "92", guifg = "#899bbf"}
+NordColors.Include		= {fg = "245", guifg = "#899bbf"}
 
 NordColors.Type			= {fg = "98", guifg = "#88C0D0"}
 NordColors.Structure	= {fg = "98", guifg = "#88C0D0"}
