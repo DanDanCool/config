@@ -72,8 +72,8 @@ function fzf.close()
 	vim.api.nvim_set_current_win(fzf.cwin)
 	vim.api.nvim_set_current_buf(fzf.cbuf)
 
-	vim.api.nvim_win_close(fzf.results.win, { force = 1 })
-	vim.api.nvim_win_close(fzf.prompt.win, { force = 1 })
+	vim.api.nvim_win_close(fzf.results.win, true)
+	vim.api.nvim_win_close(fzf.prompt.win, true)
 	vim.api.nvim_buf_delete(fzf.results.buf, { force = 1 })
 	vim.api.nvim_buf_delete(fzf.prompt.buf, { force = 1 })
 	vim.api.nvim_input('<esc>')
@@ -114,7 +114,7 @@ function fzf.run()
 	fzf.create_win()
 
 	local timer = vim.loop.new_timer()
-	timer:start(100, 100, vim.schedule_wrap(function()
+	timer:start(100, 50, vim.schedule_wrap(function()
 		local tick = vim.api.nvim_buf_get_changedtick(fzf.prompt.buf)
 		if tick ~= fzf.prompt.tick then
 			fzf.prompt.tick = tick

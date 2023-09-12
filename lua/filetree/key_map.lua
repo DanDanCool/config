@@ -58,14 +58,17 @@ function KeyMap.SetMaps()
 
     KeyMap.Create({ key = 'o', scope = 'FileNode', callback = function(node)
 		Opener.Open(node, { reuse = 'all', where = 'p', keepopen = 1 })
+		FileTree.Close()
 	end	})
 
     KeyMap.Create({ key = 'i', scope = 'FileNode', callback = function(node)
 		Opener.Open(node, { where = 'h', keepopen = 1 })
+		FileTree.Close()
 	end	})
 
     KeyMap.Create({ key = 's', scope = 'FileNode', callback = function(node)
 		Opener.Open(node, { where = 'v', keepopen = 1 })
+		FileTree.Close()
 	end	})
 
     KeyMap.Create({ key = 'O', scope = 'DirNode', callback = function(node)
@@ -100,10 +103,12 @@ function KeyMap.SetMaps()
 
     KeyMap.Create({ key = 't', scope = 'FileNode', callback = function(node)
 		Opener.Open(node, {where = 't', keepopen = 1})
+		FileTree.Close()
 	end	})
 
     KeyMap.Create({ key = 'T', scope = 'FileNode', callback =  function(node)
 		Opener.Open(node, {where = 't', keepopen = 1, stay = 1})
+		FileTree.Close()
 	end	})
 
 	KeyMap.Create({ key = 'n', scope = 'FileNode', callback = function(node)

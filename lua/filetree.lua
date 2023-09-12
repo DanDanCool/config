@@ -11,6 +11,7 @@ local Config	= require'filetree/config'
 FileTree.WinSize = 30
 
 FileTree.BufID = nil
+FileTree.WinID = nil
 FileTree.HlID = nil
 
 FileTree.Cursor = { 1, 1 }
@@ -23,12 +24,19 @@ function FileTree.Render()
 end
 
 function FileTree.CreateWindow()
-	vim.api.nvim_command('silent! topleft vertical new')
+	local opts = {
+		relative	= 'editor',
+		style		= 'minimal',
+		border		= 'single'
+	}
 
-	vim.t.FileTreeWin = vim.api.nvim_get_current_win()
+	opts.col = math.ceil(vim.o.columns / 4)
+	opts.row = math.ceil(vim.o.lines / 8) - 2
+	opts.width = vim.o.columns - opts.col * 2
+	opts.height = vim.o.lines - opts.row * 2 - 6
 
-	vim.api.nvim_win_set_buf(vim.t.FileTreeWin, FileTree.BufID)
-	vim.api.nvim_win_set_width(vim.t.FileTreeWin, FileTree.WinSize)
+	FileTree.BufID = vim.api.nvim_create_buf(false, true)
+	FileTree.WinID = vim.api.nvim_open_win(FileTree.BufID, true, opts)
 
 	vim.wo.winfixwidth = true
 
@@ -63,14 +71,13 @@ function FileTree.CreateWindow()
 end
 
 function FileTree.Toggle()
-	if not vim.t.FileTreeWin then
+	if not FileTree.WinID then
 		FileTree.CreateWindow()
 		FileTree.Render()
 
-		vim.api.nvim_win_set_cursor(vim.t.FileTreeWin, FileTree.Cursor)
+		vim.api.nvim_win_set_cursor(FileTree.WinID, FileTree.Cursor)
 	else
 		FileTree.Close()
-		vim.t.FileTreeWin = nil
 	end
 end
 
@@ -90,7 +97,6 @@ local function FileTreeInit()
 	FileTree.Root = TreeNode.CreateNode(pathInfo)
 	TreeNode.InitChildren(FileTree.Root)
 	FileTree.Root.isOpen = true
-	FileTree.BufID = vim.api.nvim_create_buf(false, true)
 end
 
 function FileTree.Setup()
@@ -124,14 +130,16 @@ function FileTree.ChangeRoot(node)
     FileTree.Render()
 end
 
--- Closes the tab tree window for this tab
 function FileTree.Close()
-    if not vim.t.FileTreeWin or vim.fn.winnr('$') == 1 then
+    if not FileTree.WinID then
         return
     end
 
-	FileTree.Cursor = vim.api.nvim_win_get_cursor(vim.t.FileTreeWin)
-	vim.api.nvim_win_close(vim.t.FileTreeWin, true)
+	FileTree.Cursor = vim.api.nvim_win_get_cursor(FileTree.WinID)
+	vim.api.nvim_win_close(FileTree.WinID, true)
+	vim.api.nvim_buf_delete(FileTree.BufID, { force = true })
+	FileTree.WinID = nil
+	FileTree.BufID = nil
 end
 
 return FileTree

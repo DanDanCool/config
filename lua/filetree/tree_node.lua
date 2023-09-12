@@ -56,9 +56,9 @@ function TreeNode.ToggleOpenDir(node)
 		end
 	end
 
-	local cursorpos = vim.api.nvim_win_get_cursor(vim.t.FileTreeWin)
+	local cursorpos = vim.api.nvim_win_get_cursor(FileTree.WinID)
 	FileTree.Render()
-	vim.api.nvim_win_set_cursor(vim.t.FileTreeWin, cursorpos)
+	vim.api.nvim_win_set_cursor(FileTree.WinID, cursorpos)
 end
 
 -- Open this directory node and any descendant directory nodes whose pathnames are not ignored.
