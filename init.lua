@@ -68,7 +68,7 @@ require('filetree').Setup()
 -- require('tags').setup()
 require('pairs').setup()
 require('statusline').setup()
--- require('fzf').setup()
+require('fzf').setup()
 -- require('ripgrep').setup()
 
 vim.opt.completeopt = 'menuone,noinsert,noselect'
