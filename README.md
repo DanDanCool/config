@@ -1,14 +1,15 @@
 # config
 configuration for neovim, requires version 0.9
 
-# Notes:
+# notes:
 - ctags deprecated, replaced with treesitter
+- for win32 parsers, check out: https://github.com/DanDanCool/treesitter-parsers
 
-# TODO:
+# todo:
 - finish lsp integration
 - proper credits
 
-# Credits:
+# credits:
 Git integration provided by:
 https://github.com/itchyny/vim-gitbranch
 
