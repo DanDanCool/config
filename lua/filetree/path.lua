@@ -3,12 +3,12 @@
 -- pathname. Various operations on pathnames are provided and a number of
 -- representations of a given path name can be accessed here.
 
-local Path = {}
+local path = {}
 
-function Path.ChangeCWD(pathInfo)
-	local dir = pathInfo.path
+function path.change_cwd(path_info)
+	local dir = path_info.path
 
-	if not pathInfo.isDirectory then
+	if not pathinfo.directory then
 		dir = vim.fn.fnamemodify(dir, ":h")
 	end
 
@@ -16,30 +16,30 @@ function Path.ChangeCWD(pathInfo)
 	print('CWD: ' .. dir)
 end
 
-function Path.CreatePathInfo(path)
-	path = vim.fn.fnamemodify(path, ":.")
-	local filetype = vim.fn.getftype(path)
+function path.path_info(name)
+	name = vim.fn.fnamemodify(name, ":.")
+	local filetype = vim.fn.getftype(name)
 
-	local pathInfo = {}
+	local path_info = {}
 
 	if filetype == 'dir' then
-		pathInfo.isDirectory = true
+		path_info.directory = true
 	else
 		-- assume file... this might be wrong but whatever
-		pathInfo.isDirectory = false
+		path_info.directory = false
 	end
 
-	pathInfo.flags	= ''
-	pathInfo.path	= path
+	path_info.flags	= ''
+	path_info.path	= name
 
-	return pathInfo
+	return path_info
 end
 
 -- Renames this node on the filesystem
-function Path.Rename(path)
-	vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
+function path.rename(name)
+	vim.fn.mkdir(vim.fn.fnamemodify(name, ":h"), "p")
 
-	if vim.fn.rename(self.str(), path) then
+	if vim.fn.rename(self.str(), name) then
 		print("rename failed")
 	end
 end
@@ -48,33 +48,33 @@ end
 --
 -- Args:
 -- dest: the location to copy this dir/file to
-function Path.Copy(pathInfo, dest)
+function path.copy(path_info, dest)
 	vim.fn.mkdir(vim.fn.fnamemodify(dest, ":h"), "p")
 
 	if vim.fn.has('win32') then
-		if pathInfo.isDirectory then
-			os.execute('xcopy /s /e /i /y /q ' .. pathInfo.path .. dest)
+		if path_info.directory then
+			os.execute('xcopy /s /e /i /y /q ' .. path_info.path .. dest)
 		else
-			os.execute('copy /y ' .. pathInfo.path .. dest)
+			os.execute('copy /y ' .. path_info.path .. dest)
 		end
 
 		return
 	end
 
-	os.execute('cp -r ' .. pathInfo.path .. dest)
+	os.execute('cp -r ' .. path_info.path .. dest)
 end
 
 -- Deletes the file or directory represented by this path.
-function Path.Delete(pathInfo)
+function path.delete(path_info)
 	local flags = ''
 
-	if pathInfo.isDirectory then
+	if path_info.directory then
 		flags = 'rf'
 	end
 
-	if delete(pathInfo.path, flags) then
+	if vim.fn.delete(path_info.path, flags) then
 		print("could not delete file/directory")
 	end
 end
 
-return Path
+return path

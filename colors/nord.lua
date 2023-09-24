@@ -51,7 +51,7 @@ NordColors.Todo			= {fg = "white", bg = "28", guifg = "#D8DEE9", guibg = "#434C5
 -- Misc
 NordColors.Folded		= {fg = "white", bg = "54", guifg = "#D8DEE9", guibg = "#3B4252"}
 NordColors.Visual		= {bg = "242", guibg = "#3B4252"}
-NordColors.Search		= {fg = "white", bg = "242", guifg = "#D8DEE9", guibg = "#3B4252"}
+NordColors.Search		= {fg = "white", bg = "242", guifg = "#D8DEE9", guibg = "#B48EAD"}
 NordColors.LineNr		= {fg =  "38", guifg = "#2E3440"}
 NordColors.Pmenu		= {fg = "white", bg = "92", guifg = "#E5E9F0", guibg = "#434C5E"}
 NordColors.PmenuSel		= {fg = "white", bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}

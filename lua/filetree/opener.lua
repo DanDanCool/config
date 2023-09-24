@@ -1,33 +1,13 @@
 -- CLASS: Opener
 -- The Opener class defines an API for 'opening' operations.
-
-local Opener = {}
-
-function Opener.Open(node, options)
-	options = options or {}
-	options.pathInfo = node.pathInfo
-
-	local win = vim.api.nvim_get_current_win()
-
-	if BufIsOpen(options) then
-		return
-	end
-
-	OpenWindow(options)
-	vim.api.nvim_command('edit ' .. node.pathInfo.path)
-
-	if options.stay then
-		vim.api.nvim_set_current_win(win)
-	end
-end
-
+--
 -- Find if the buffer is already open somewhere
 -- return 1 if we were successful
-function BufIsOpen(options)
+local function buf_open(options)
 	local bufid = -1
 
 	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-		if string.find(vim.api.nvim_buf_get_name(buf), options.pathInfo.path, 1, true) then
+		if string.find(vim.api.nvim_buf_get_name(buf), options.path_info.path, 1, true) then
 			bufid = buf
 			break
 		end
@@ -51,36 +31,20 @@ function BufIsOpen(options)
 	return false
 end
 
-function OpenWindow(options)
-	if options.where == 't' then
-		vim.api.nvim_command('wincmd p')
-		vim.api.nvim_command('tabnew')
-	elseif options.where == 'p' then
-		PreviousWindow(options)
-	else
-		OpenSplit(options)
-	end
-end
-
-function OpenSplit(options)
-	local onlyOneWin = (vim.fn.winnr('$') == 1)
-	local splitMode = 'vertical'
-
+local function open_split(options)
+	local split = 'vertical'
 	if options.where == 'h' then
-		splitMode = ''
+		split = ''
 	end
-
-	-- resize tree window
-	vim.api.nvim_command('silent vertical resize' .. FileTree.WinSize)
 
 	-- Open the new window
 	-- Error: file might already be open and modified
 	vim.api.nvim_command('wincmd p')
-	vim.api.nvim_command(splitMode .. ' split')
+	vim.api.nvim_command(split .. ' split')
 end
 
-function PreviousWindow(options)
-	local prevUsable = true
+local function previous_window(options)
+	local prev_usable = true
 
 	local winid = vim.fn.win_getid(vim.fn.winnr('#'))
 	local buf = vim.api.nvim_win_get_buf(winid)
@@ -90,10 +54,10 @@ function PreviousWindow(options)
 		or vim.api.nvim_win_get_option(winid, 'previewwindow')
 		or (vim.api.nvim_buf_get_option(buf, 'modified') and not vim.g.hidden)
 		or vim.fn.winnr('$') == 1 then
-		prevUsable = false
+		prev_usable = false
 	end
 
-	if not prevUsable then
+	if not prev_usable then
 		for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 			buf = vim.api.nvim_win_get_buf(win)
 
@@ -107,10 +71,41 @@ function PreviousWindow(options)
 	end
 
 	if not vim.api.nvim_win_is_valid(winid) then
-		OpenSplit(options)
+		open_split(options)
 	else
 		vim.api.nvim_set_current_win(winid)
 	end
 end
 
-return Opener
+local function open_window(options)
+	if options.where == 't' then
+		vim.api.nvim_command('wincmd p')
+		vim.api.nvim_command('tabnew')
+	elseif options.where == 'p' then
+		previous_window(options)
+	else
+		open_split(options)
+	end
+end
+
+local opener = {}
+
+function opener.open(node, options)
+	options = options or {}
+	options.path_info = node.path_info
+
+	local win = vim.api.nvim_get_current_win()
+
+	if buf_open(options) then
+		return
+	end
+
+	open_window(options)
+	vim.api.nvim_command('edit ' .. node.path_info.path)
+
+	if options.stay then
+		vim.api.nvim_set_current_win(win)
+	end
+end
+
+return opener

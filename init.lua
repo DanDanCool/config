@@ -22,6 +22,8 @@ vim.opt.showtabline = 2
 vim.opt.termguicolors = true
 vim.opt.pumheight = 15
 
+vim.opt.laststatus = 3
+vim.opt.cmdheight = 0
 vim.opt.modeline = false
 
 vim.opt.shada = ''
@@ -55,34 +57,52 @@ vim.api.nvim_set_keymap('t', '<esc>', '<c-\\><c-n>', map_opt)
 vim.api.nvim_set_keymap('v', 'y', '"+y', map_opt)
 vim.api.nvim_set_keymap('v', 'p', '"+p', map_opt)
 
-vim.api.nvim_command('augroup autocommands')
-vim.api.nvim_command('	autocmd!')
-vim.api.nvim_command('	autocmd BufWritePre * %s/\\s\\+$//e')
-vim.api.nvim_command('	autocmd TermOpen * setlocal nonumber')
-vim.api.nvim_command('augroup end')
+local function delete_empty_buffers()
+	local name = vim.api.nvim_buf_get_name(0)
+	if name == '' then
+		return
+	end
+
+	local bufs = vim.api.nvim_list_bufs()
+	for _, buf in ipairs(bufs) do
+		if vim.api.nvim_buf_get_name(buf) == '' and not vim.api.nvim_buf_get_option(buf, 'modified') then
+			vim.api.nvim_buf_delete(buf, { force = true })
+		end
+	end
+end
+
+local groupid = vim.api.nvim_create_augroup("global_autocommands", {})
+vim.api.nvim_create_autocmd({"BufWritePre"}, {
+	group = groupid,
+	command = "%s/\\s\\+$//e"
+})
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+	group = groupid,
+	callback = delete_empty_buffers
+})
 
 -- plugins
 -- require('lspconfig').clangd.setup()
--- require('treesitter').setup()
-require('filetree').Setup()
--- require('tags').setup()
+require('treesitter').setup()
+require('filetree').setup()
 require('pairs').setup()
 require('statusline').setup()
 require('fzf').setup()
--- require('ripgrep').setup()
+require('ripgrep').setup()
 
 vim.opt.completeopt = 'menuone,noinsert,noselect'
 vim.opt.shortmess = vim.opt.shortmess + 'c'
 
-vim.api.nvim_set_keymap('i', '<c-p>', '<cmd>lua require("completion").triggerCompletion()<cr>', map_opt)
-vim.api.nvim_set_keymap('i', '<c-n>', '<cmd>lua require("completion").triggerCompletion()<cr>', map_opt)
-
--- tagbar
--- vim.api.nvim_set_keymap('n', ';', '<cmd>lua require("tags").toggle()<cr>', map_opt)
-vim.api.nvim_command('command! Tags lua require("tags").regenerate()')
+--vim.api.nvim_set_keymap('i', '<c-p>', '<cmd>lua require("completion").trigger_completion()<cr>', map_opt)
+--vim.api.nvim_set_keymap('i', '<c-n>', '<cmd>lua require("completion").trigger_completion()<cr>', map_opt)
 
 -- NerdTree"
-vim.api.nvim_set_keymap('n', '<c-n>', '<cmd>lua require("filetree").Toggle()<cr>', map_opt)
+vim.api.nvim_set_keymap('n', '<c-n>', '<cmd>lua require("filetree").toggle()<cr>', map_opt)
+
+-- FZF
+vim.api.nvim_set_keymap('n', '<c-p>', '<cmd>lua require("fzf").run()<cr>', map_opt)
+
+vim.api.nvim_set_keymap('n', ';', '<cmd>lua require("treesitter").toggle()<cr>', map_opt)
 
 -- disable nonsense plugins
 vim.g.loaded_fzf				= 1
@@ -96,9 +116,6 @@ vim.g.loaded_shada_plugin		= 1
 vim.g.loaded_remote_plugins		= 1
 vim.g.loaded_spellfile_plugin	= 1
 vim.g.loaded_tutor_mode_plugin	= 1
-
--- FZF
-vim.api.nvim_set_keymap('n', '<c-p>', '<cmd>lua require("fzf").run()<cr>', map_opt)
 
 vim.g.c_no_curly_error = 1
 vim.g.c_no_bracket_error = 1

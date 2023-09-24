@@ -5,7 +5,7 @@ rg.format = "%f:%l:%c:%m"
 rg.command = 'rg --vimgrep'
 rg.window_location = 'botright'
 
-local function search(txt)
+local function search(args)
 	local rgopts = ' '
 
 	if vim.o.ignorecase then
@@ -16,17 +16,18 @@ local function search(txt)
 		rgopts = rgopts .. '-S '
 	end
 
-	vim.api.nvim_command('grep! ' .. rgopts .. txt)
+	local query = '"' .. args.args .. '"'
+	vim.api.nvim_command('grep!' .. rgopts .. query)
 
 	if #vim.fn.getqflist() then
 		vim.api.nvim_command('botright copen | redraw!')
 	else
-	vim.api.nvim_command('cclose | redraw!')
+		vim.api.nvim_command('cclose | redraw!')
 		print('No match found for ' .. txt)
 	end
 end
 
-function ripgrep(txt)
+local function ripgrep(args)
 	local grepprgb = vim.o.grepprg
 	local grepformatb = vim.o.grepformat
 	local shellpipe_bak = vim.o.shellpipe
@@ -38,7 +39,7 @@ function ripgrep(txt)
 		vim.opt.shellpipe="&>"
 	end
 
-	search(txt)
+	search(args)
 
 	vim.opt.shellpipe = shellpipe_bak
 	vim.opt.grepprg = grepprgb
@@ -46,7 +47,8 @@ function ripgrep(txt)
 end
 
 function rg.setup()
-	vim.api.nvim_command('command! -nargs=* Rg call v:lua.ripgrep(<q-args>)')
+	--vim.api.nvim_command('command! -nargs=* Rg call v:lua.ripgrep(<q-args>)')
+	vim.api.nvim_create_user_command("RG", ripgrep, { nargs="*", force = true })
 end
 
 return rg

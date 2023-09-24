@@ -1,7 +1,6 @@
-FileTree.Config = {}
-local Config = FileTree.Config
+local config = {}
 
-Config.ExtensionSymbols = {
+config.extension_symbols = {
 	md       = '',
 	json     = '',
 	py       = '',
@@ -20,8 +19,8 @@ Config.ExtensionSymbols = {
 	vim      = ''
 }
 
-function Config.ExtensionSymbols.__index(table, key)
-	local value = Config.ExactSymbols[key]
+function config.extension_symbols.__index(table, key)
+	local value = config.exact_symbols[key]
 	if value ~= nil then
 		return value
 	end
@@ -36,7 +35,7 @@ function Config.ExtensionSymbols.__index(table, key)
 	return value
 end
 
-Config.ExactSymbols = {
+config.exact_symbols = {
 	gitconfig		= '',
 	gitignore		= '',
 	gitattributes	= '',
@@ -45,14 +44,14 @@ Config.ExactSymbols = {
 	cmakeliststxt	= ''
 }
 
-function Config.ExactSymbols.__index(table, key)
+function config.exact_symbols.__index(table, key)
 	key = string.lower(key)
 	key = string.gsub(key, '%.', '')
 	return rawget(table, key)
 end
 
 -- taken from https://github.com/tiagofumo/vim-nerdtree-syntax-highlight
-Config.ExtensionColors = {
+config.extension_colors = {
 	md		= "f09f17",
 	json	= "71909e",
 	py		= "f09f17",
@@ -72,7 +71,7 @@ Config.ExtensionColors = {
 	misc	= "9b9b9b"
 }
 
-Config.ExactColors = {
+config.exact_colors = {
 	gitconfig		= '71909e',
 	gitignore		= '71909e',
 	gitattributes	= '71909e',
@@ -81,26 +80,26 @@ Config.ExactColors = {
 	cmakeliststxt	= '71909e'
 }
 
-Config.ExtensionGroups = {}
+config.extension_groups = {}
 
-function Config.ExtensionGroups.__index(table, key)
+function config.extension_groups.__index(table, key)
 	local exact = string.lower(key)
 	exact = string.gsub(exact, '%.', '')
 
-	if Config.ExactColors[exact] ~= nil then
+	if config.exact_colors[exact] ~= nil then
 		return 'FileTreeExtension_' .. exact
 	end
 
 	key = vim.fn.fnamemodify(key, ':e')
-	if Config.ExtensionColors[key] == nil then
+	if config.extension_colors[key] == nil then
 		return 'FileTreeExtension_misc'
 	end
 
 	return 'FileTreeExtension_' .. key
 end
 
-Config.ExtensionSymbols = setmetatable(Config.ExtensionSymbols, Config.ExtensionSymbols)
-Config.ExactSymbols = setmetatable(Config.ExactSymbols, Config.ExactSymbols)
-Config.ExtensionGroups = setmetatable({}, Config.ExtensionGroups)
+config.extension_symbols = setmetatable(config.extension_symbols, config.extension_symbols)
+config.exact_symbols = setmetatable(config.exact_symbols, config.exact_symbols)
+config.extension_groups = setmetatable(config.extension_groups, config.extension_groups)
 
-return Config
+return config

@@ -1,46 +1,46 @@
-local TreeNode = require'filetree/tree_node'
-local Opener = require'filetree/opener'
+local tree_node = require'filetree/tree_node'
+local opener = require'filetree/opener'
 
-local KeyMap = {}
-KeyMap.Maps = {}
+local key_map = {}
+key_map.maps = {}
 
-function KeyMap.BindAll()
+function key_map.bind_all()
 	local map_opts = { noremap = true, silent = true }
 
-    for key, def in pairs(KeyMap.Maps) do
-		vim.api.nvim_buf_set_keymap(0, 'n', def.key, '<cmd>lua require"filetree/key_map".Invoke("' .. def.key .. '")<cr>', map_opts)
+    for key, def in pairs(key_map.maps) do
+		vim.api.nvim_buf_set_keymap(0, 'n', def.key, '<cmd>lua require("filetree/key_map").invoke("' .. def.key .. '")<cr>', map_opts)
     end
 end
 
--- Find a keymapping for a:key and the current scope invoke it.
+-- Find a key_mapping for a:key and the current scope invoke it.
 --
 -- Scope is determined as follows:
 --    * if the cursor is on a dir node then DirNode
 --    * if the cursor is on a file node then FileNode
 --
--- If a keymap has the scope of 'all' then it will be called if no other keymap
+-- If a key_map has the scope of 'all' then it will be called if no other keymap
 -- is found for a:key and the scope.
-function KeyMap.Invoke(key)
-    local node = TreeNode.Nodes[vim.fn.line('.')]
+function key_map.invoke(key)
+    local node = tree_node.nodes[vim.fn.line('.')]
 	local km = nil
 
     if node ~= nil then
         -- try file node
-        if not node.pathInfo.isDirectory then
-            km = KeyMap.Maps[key ..'FileNode']
+        if not node.path_info.directory then
+            km = key_map.maps[key ..'FileNode']
 		else
-            km = KeyMap.Maps[key .. 'DirNode']
+            km = key_map.maps[key .. 'DirNode']
         end
 
         -- try generic node
 		if km == nil then
-			km = KeyMap.Maps[key .. 'Node']
+			km = key_map.maps[key .. 'Node']
         end
     end
 
     -- try all
 	if km == nil then
-		km = KeyMap.Maps[key .. 'all']
+		km = key_map.maps[key .. 'all']
 	end
 
     if km ~= nil then
@@ -48,92 +48,88 @@ function KeyMap.Invoke(key)
     end
 end
 
-function KeyMap.Create(options)
+function key_map.create(options)
     vim.tbl_extend("keep", options, {scope = 'all'})
-	KeyMap.Maps[options.key .. options.scope] = options
+	key_map.maps[options.key .. options.scope] = options
 end
 
-function KeyMap.SetMaps()
-    KeyMap.Create({ key = 'o', scope = 'DirNode', callback = TreeNode.ToggleOpenDir	})
+function key_map.set_maps()
+    key_map.create({ key = 'o', scope = 'DirNode', callback = tree_node.toggle_open_dir	})
 
-    KeyMap.Create({ key = 'o', scope = 'FileNode', callback = function(node)
-		Opener.Open(node, { reuse = 'all', where = 'p', keepopen = 1 })
-		FileTree.Close()
+    key_map.create({ key = 'o', scope = 'FileNode', callback = function(node)
+		opener.open(node, { reuse = 'all', where = 'p', keepopen = 1 })
+		filetree.close()
 	end	})
 
-    KeyMap.Create({ key = 'i', scope = 'FileNode', callback = function(node)
-		Opener.Open(node, { where = 'h', keepopen = 1 })
-		FileTree.Close()
+    key_map.create({ key = 'i', scope = 'FileNode', callback = function(node)
+		opener.open(node, { where = 'h', keepopen = 1 })
+		filetree.close()
 	end	})
 
-    KeyMap.Create({ key = 's', scope = 'FileNode', callback = function(node)
-		Opener.Open(node, { where = 'v', keepopen = 1 })
-		FileTree.Close()
+    key_map.create({ key = 's', scope = 'FileNode', callback = function(node)
+		opener.open(node, { where = 'v', keepopen = 1 })
+		filetree.close()
 	end	})
 
-    KeyMap.Create({ key = 'O', scope = 'DirNode', callback = function(node)
-		TreeNode.OpenRecursively(node)
-		FileTree.Render()
+    key_map.create({ key = 'O', scope = 'DirNode', callback = function(node)
+		tree_node.openrecursively(node)
+		filetree.render()
 	end	})
 
-    KeyMap.Create({ key = 'C', scope = 'Node', callback = function(node)
-		FileTree.ChangeRoot(node)
+    key_map.create({ key = 'C', scope = 'Node', callback = function(node)
+		filetree.change_root(node)
 	end	})
 
-    KeyMap.Create({ key = 'CD', scope = 'all', callback = FileTree.CWD })
+    key_map.create({ key = 'CD', scope = 'all', callback = filetree.cwd })
 
-    KeyMap.Create({ key = 'R', scope = 'all', callback = function()
-		TreeNode.Refresh(FileTree.Root)
-		FileTree.Render()
+    key_map.create({ key = 'R', scope = 'all', callback = function()
+		tree_node.refresh(filetree.root)
+		filetree.render()
 	end	})
 
-	KeyMap.Create({ key = 'r', scope = 'DirNode', callback = function(node)
-		TreeNode.Refresh(node)
-		FileTree.Render()
+	key_map.create({ key = 'r', scope = 'DirNode', callback = function(node)
+		tree_node.refresh(node)
+		filetree.render()
 	end })
 
-    KeyMap.Create({ key = 'm', scope = 'Node', callback = function(node)
-		local mc = FileTree.MenuController.New(FileTree.MenuItem.AllEnabled())
-		mc.showMenu()
+    key_map.create({ key = 'p', scope = 'Node', callback = function(node)
+		vim.api.nvim_win_set_cursor(filetree.winid, { node.parent.ln, 0 })
 	end	})
 
-    KeyMap.Create({ key = 'p', scope = 'Node', callback = function(node)
-		vim.api.nvim_win_set_cursor(vim.t.FileTreeWin, { node.parent.ln, 0 })
+    key_map.create({ key = 't', scope = 'FileNode', callback = function(node)
+		opener.open(node, {where = 't', keepopen = 1})
+		filetree.close()
 	end	})
 
-    KeyMap.Create({ key = 't', scope = 'FileNode', callback = function(node)
-		Opener.Open(node, {where = 't', keepopen = 1})
-		FileTree.Close()
+    key_map.create({ key = 'T', scope = 'FileNode', callback =  function(node)
+		opener.open(node, {where = 't', keepopen = 1, stay = 1})
+		filetree.close()
 	end	})
 
-    KeyMap.Create({ key = 'T', scope = 'FileNode', callback =  function(node)
-		Opener.Open(node, {where = 't', keepopen = 1, stay = 1})
-		FileTree.Close()
-	end	})
-
-	KeyMap.Create({ key = 'n', scope = 'FileNode', callback = function(node)
+	key_map.create({ key = 'n', scope = 'FileNode', callback = function(node)
 		local parent = node.parent
-		local path = vim.fn.input('file/directory: ', parent.pathInfo.path .. '/', 'file')
+		local path = vim.fn.input('file/directory: ', parent.path_info.path .. '/', 'file')
 
 		if path:sub(#path, #path) == '/' then
 			vim.fn.mkdir(path, 'p')
 		else
 			vim.api.nvim_command('wincmd p')
 			vim.api.nvim_command('edit ' .. path)
+			filetree.close()
 		end
-
 	end })
 
-	KeyMap.Create({ key = 'n', scope = 'DirNode', callback = function(node)
-		local path = vim.fn.input('file/directory: ', node.pathInfo.path .. '/', 'file')
+	key_map.create({ key = 'n', scope = 'DirNode', callback = function(node)
+		local path = vim.fn.input('file/directory: ', node.path_info.path .. '/', 'file')
 
 		if path:sub(#path, #path) == '/' then
 			vim.fn.mkdir(path, 'p')
 		else
 			vim.api.nvim_command('wincmd p')
 			vim.api.nvim_command('edit ' .. path)
+			filetree.close()
 		end
 	end })
 end
 
-return KeyMap
+return key_map

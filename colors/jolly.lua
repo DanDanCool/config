@@ -48,7 +48,7 @@ JollyColors.Special		= {fg = "98", guifg = "#EBCB8B"}
 -- Misc
 JollyColors.Folded		= {fg = "white", bg = "54", guifg = "#dcdcdc", guibg = "#594359"}
 JollyColors.Visual		= {bg = "242", guibg = "#594359"}
-JollyColors.Search		= {fg = "black", bg = "198", guifg = "#1B141B", guibg = "#F92672"}
+JollyColors.Search		= {fg = "black", bg = "198", guifg = "#D8DEE9", guibg = "#B48EAD"}
 JollyColors.LineNr		= {fg =  "38", guifg = "#0089b7"}
 JollyColors.Pmenu		= {fg = "white", bg = "92", guifg = "#dcdcdc", guibg = "#231a23"}
 JollyColors.PmenuSel	= {fg = "white", bg = "62", guifg = "#dcdcdc", guibg = "#594359"}

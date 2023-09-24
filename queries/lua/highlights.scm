@@ -1,34 +1,20 @@
-;;; Highlighting for lua
-
-;;; Builtins
 ;; Keywords
 
-(if_statement
-[
-  "if"
-  "then"
-  "end"
-] @conditional)
+"return" @keyword.return
 
 [
-  "else"
-  "elseif"
-  "then"
-] @conditional
+ "goto"
+ "in"
+ "local"
+] @keyword
 
-(for_statement
+(break_statement) @keyword
+
+(do_statement
 [
-  "for"
   "do"
   "end"
-] @repeat)
-
-(for_in_statement
-[
-  "for"
-  "do"
-  "end"
-] @repeat)
+] @keyword)
 
 (while_statement
 [
@@ -43,56 +29,91 @@
   "until"
 ] @repeat)
 
-(do_statement
+(if_statement
 [
+  "if"
+  "elseif"
+  "else"
+  "then"
+  "end"
+] @conditional)
+
+(elseif_statement
+[
+  "elseif"
+  "then"
+  "end"
+] @conditional)
+
+(else_statement
+[
+  "else"
+  "end"
+] @conditional)
+
+(for_statement
+[
+  "for"
   "do"
   "end"
-] @keyword)
+] @repeat)
 
+(function_declaration
 [
- "in"
- "local"
- "return"
- (break_statement)
- "goto"
-] @keyword
+  "function"
+  "end"
+] @keyword.function)
+
+(function_definition
+[
+  "function"
+  "end"
+] @keyword.function)
 
 ;; Operators
 
 [
- "not"
  "and"
+ "not"
  "or"
 ] @keyword.operator
 
 [
-"="
-"~="
-"=="
-"<="
-">="
-"<"
-">"
-"+"
-"-"
-"%"
-"/"
-"//"
-"*"
-"^"
-"&"
-"~"
-"|"
-">>"
-"<<"
-".."
-"#"
- ] @operator
+  "+"
+  "-"
+  "*"
+  "/"
+  "%"
+  "^"
+  "#"
+  "=="
+  "~="
+  "<="
+  ">="
+  "<"
+  ">"
+  "="
+  "&"
+  "~"
+  "|"
+  "<<"
+  ">>"
+  "//"
+  ".."
+] @operator
 
-;; Punctuation
-[ "," "." ":"] @punctuation.delimiter
+;; Punctuations
+
+[
+  ";"
+  ":"
+  "::"
+  ","
+  "."
+] @punctuation.delimiter
 
 ;; Brackets
+
 [
  "("
  ")"
@@ -103,44 +124,127 @@
 ] @punctuation.bracket
 
 ;; Variables
+
 (identifier) @variable
 
+((identifier) @constant.builtin
+  (#eq? @constant.builtin "_VERSION"))
+
+((identifier) @variable.builtin
+  (#eq? @variable.builtin "self"))
+
+((identifier) @namespace.builtin
+  (#any-of? @namespace.builtin "_G" "debug" "io" "jit" "math" "os" "package" "string" "table" "utf8"))
+
+((identifier) @keyword.coroutine
+  (#eq? @keyword.coroutine "coroutine"))
+
+(variable_list
+  (attribute
+    "<" @punctuation.bracket
+    (identifier) @attribute
+    ">" @punctuation.bracket))
+
+;; Labels
+
+(label_statement (identifier) @label)
+
+(goto_statement (identifier) @label)
+
 ;; Constants
-[
-(false)
-(true)
-] @boolean
+
+((identifier) @constant
+ (#lua-match? @constant "^[A-Z][A-Z_0-9]*$"))
+
+(vararg_expression) @constant
+
 (nil) @constant.builtin
-(spread) @constant ;; "..."
+
+[
+  (false)
+  (true)
+] @boolean
+
+;; Tables
+
+(field name: (identifier) @field)
+
+(dot_index_expression field: (identifier) @field)
+
+(table_constructor
+[
+  "{"
+  "}"
+] @constructor)
 
 ;; Functions
-(function [(function_name) (identifier)] @function)
-(function ["function" "end"] @keyword.function)
 
-(local_function (identifier) @function)
-(local_function ["function" "end"] @keyword.function)
+(parameters (identifier) @parameter)
 
-(function_definition ["function" "end"] @keyword.function)
+(function_declaration
+  name: [
+    (identifier) @function
+    (dot_index_expression
+      field: (identifier) @function)
+  ])
 
-(property_identifier) @property
-(method) @method
+(function_declaration
+  name: (method_index_expression
+    method: (identifier) @method))
 
-(function_call (identifier) @function . (arguments))
-(function_call (field_expression (property_identifier) @function) . (arguments))
+(assignment_statement
+  (variable_list .
+    name: [
+      (identifier) @function
+      (dot_index_expression
+        field: (identifier) @function)
+    ])
+  (expression_list .
+    value: (function_definition)))
 
-;; Parameters
-(parameters
-  (identifier) @parameter)
+(table_constructor
+  (field
+    name: (identifier) @function
+    value: (function_definition)))
 
-;; Nodes
-(table ["{" "}"] @constructor)
-(comment) @comment
-(string) @string
+(function_call
+  name: [
+    (identifier) @function.call
+    (dot_index_expression
+      field: (identifier) @function.call)
+    (method_index_expression
+      method: (identifier) @method.call)
+  ])
+
+(function_call
+  (identifier) @function.builtin
+  (#any-of? @function.builtin
+    ;; built-in functions in Lua 5.1
+    "assert" "collectgarbage" "dofile" "error" "getfenv" "getmetatable" "ipairs"
+    "load" "loadfile" "loadstring" "module" "next" "pairs" "pcall" "print"
+    "rawequal" "rawget" "rawlen" "rawset" "require" "select" "setfenv" "setmetatable"
+    "tonumber" "tostring" "type" "unpack" "xpcall"
+    "__add" "__band" "__bnot" "__bor" "__bxor" "__call" "__concat" "__div" "__eq" "__gc"
+    "__idiv" "__index" "__le" "__len" "__lt" "__metatable" "__mod" "__mul" "__name" "__newindex"
+    "__pairs" "__pow" "__shl" "__shr" "__sub" "__tostring" "__unm"))
+
+;; Others
+
+(comment) @comment @spell
+
+((comment) @comment.documentation
+  (#lua-match? @comment.documentation "^[-][-][-]"))
+
+((comment) @comment.documentation
+  (#lua-match? @comment.documentation "^[-][-](%s?)@"))
+
+(hash_bang_line) @preproc
+
 (number) @number
-(label_statement) @label
-; A bit of a tricky one, this will only match field names
-(field . (identifier) @field (_))
-(shebang) @comment
+
+(string) @string
+
+(escape_sequence) @string.escape
 
 ;; Error
 (ERROR) @error

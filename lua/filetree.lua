@@ -1,29 +1,37 @@
-FileTree	= {}
+filetree	= {}
 
 -- root of the tree, set in FileTreeInit
-FileTree.Root	= {}
+filetree.root	= {}
 
-local KeyMap	= require'filetree/key_map'
-local TreeNode	= require'filetree/tree_node'
-local Path		= require'filetree/path'
-local Config	= require'filetree/config'
+local key_map	= require'filetree/key_map'
+local tree_node	= require'filetree/tree_node'
+local path		= require'filetree/path'
+filetree.config	= require'filetree/config'
 
-FileTree.WinSize = 30
+filetree.bufid = nil
+filetree.winid = nil
+filetree.hlid = nil
 
-FileTree.BufID = nil
-FileTree.WinID = nil
-FileTree.HlID = nil
+filetree.cursor = { 1, 0 }
 
-FileTree.Cursor = { 1, 1 }
-
-function FileTree.Render()
-	vim.api.nvim_buf_set_option(FileTree.BufID, 'modifiable', true)
-	vim.api.nvim_buf_set_lines(FileTree.BufID, 0, -1, false, TreeNode.Render(FileTree.Root))
-	TreeNode.HighlightTree()
-	vim.api.nvim_buf_set_option(FileTree.BufID, 'modifiable', false)
+function filetree.render()
+	vim.api.nvim_buf_set_option(filetree.bufid, 'modifiable', true)
+	vim.api.nvim_buf_set_lines(filetree.bufid, 0, -1, false, tree_node.render(filetree.root))
+	tree_node.highlight_tree()
+	vim.api.nvim_buf_set_option(filetree.bufid, 'modifiable', false)
 end
 
-function FileTree.CreateWindow()
+function filetree.create_window()
+	filetree.bufid = vim.api.nvim_create_buf(false, true)
+
+    -- Options for a non-file/control buffer.
+	vim.api.nvim_buf_set_option(filetree.bufid, 'bufhidden', 'hide')
+	vim.api.nvim_buf_set_option(filetree.bufid, 'buftype', 'nofile')
+	vim.api.nvim_buf_set_option(filetree.bufid, 'swapfile', false)
+	vim.api.nvim_buf_set_option(filetree.bufid, 'filetype', 'filetree')
+	vim.api.nvim_buf_set_option(filetree.bufid, 'modifiable', false)
+	vim.api.nvim_buf_set_option(filetree.bufid, 'buflisted', false)
+
 	local opts = {
 		relative	= 'editor',
 		style		= 'minimal',
@@ -35,20 +43,10 @@ function FileTree.CreateWindow()
 	opts.width = vim.o.columns - opts.col * 2
 	opts.height = vim.o.lines - opts.row * 2 - 6
 
-	FileTree.BufID = vim.api.nvim_create_buf(false, true)
-	FileTree.WinID = vim.api.nvim_open_win(FileTree.BufID, true, opts)
-
-	vim.wo.winfixwidth = true
-
-    -- Options for a non-file/control buffer.
-	vim.bo.bufhidden = 'hide'
-	vim.bo.buftype = 'nofile'
-	vim.bo.swapfile = false
-	vim.bo.filetype = 'filetree'
-	vim.bo.modifiable = false
-	vim.bo.buflisted = false
+	filetree.winid = vim.api.nvim_open_win(filetree.bufid, true, opts)
 
     -- Options for controlling buffer/window appearance.
+	vim.wo.winfixwidth = true
 	vim.wo.foldcolumn = '0'
 	vim.wo.foldmethod = 'manual'
 	vim.wo.foldenable = true
@@ -61,85 +59,84 @@ function FileTree.CreateWindow()
 	vim.wo.statusline = '%#STLHighlight# TREE %#STLText#'
 
 	local map_opts = { noremap = true, silent = true }
-	vim.api.nvim_buf_set_keymap(FileTree.BufID, 'n', '<up>', '<nop>', map_opts)
-	vim.api.nvim_buf_set_keymap(FileTree.BufID, 'n', '<down>', '<nop>', map_opts)
+	vim.api.nvim_buf_set_keymap(filetree.bufid, 'n', '<up>', '<nop>', map_opts)
+	vim.api.nvim_buf_set_keymap(filetree.bufid, 'n', '<down>', '<nop>', map_opts)
 
 	vim.api.nvim_command('clearjumps')
 	vim.api.nvim_command('iabclear <buffer>')
 
-	KeyMap.BindAll()
+	key_map.bind_all()
 end
 
-function FileTree.Toggle()
-	if not FileTree.WinID then
-		FileTree.CreateWindow()
-		FileTree.Render()
+function filetree.toggle()
+	if not filetree.winid then
+		filetree.create_window()
+		filetree.render()
 
-		vim.api.nvim_win_set_cursor(FileTree.WinID, FileTree.Cursor)
+		vim.api.nvim_win_set_cursor(filetree.winid, filetree.cursor)
 	else
-		FileTree.Close()
+		filetree.close()
 	end
 end
 
-function FileTree.CWD()
-	cwdPath = Path.CreatePathInfo(vim.fn.getcwd())
+function filetree.cwd()
+	path = path.path_info(vim.fn.getcwd())
 
-	if FileTree.Root.pathInfo.path == cwdPath.path then
+	if filetree.root.path_info.path == path.path then
 		return
 	end
 
-	newRoot = TreeNode.CreateNode(cwdPath, FileTree)
-	FileTree.ChangeRoot(newRoot)
+	new_root = tree_node.create_node(path, filetree)
+	filetree.change_root(new_root)
 end
 
-local function FileTreeInit()
-    local pathInfo = Path.CreatePathInfo(vim.fn.getcwd())
-	FileTree.Root = TreeNode.CreateNode(pathInfo)
-	TreeNode.InitChildren(FileTree.Root)
-	FileTree.Root.isOpen = true
+local function init()
+    local path_info = path.path_info(vim.fn.getcwd())
+	filetree.root = tree_node.create_node(path_info)
+	tree_node.init_children(filetree.root)
+	filetree.root.open = true
 end
 
-function FileTree.Setup()
-	KeyMap.SetMaps()
-	FileTreeInit()
+function filetree.setup()
+	key_map.set_maps()
+	init()
 
-	FileTree.HlID = vim.api.nvim_create_namespace("FileTree")
+	filetree.hlid = vim.api.nvim_create_namespace("FileTree")
 
-	for key, val in pairs(Config.ExtensionColors) do
+	for key, val in pairs(filetree.config.extension_colors) do
 		vim.api.nvim_command('hi def FileTreeExtension_' .. key .. ' ctermfg=white guifg=#' .. val)
 	end
 
-	for key, val in pairs(Config.ExactColors) do
+	for key, val in pairs(filetree.config.exact_colors) do
 		vim.api.nvim_command('hi def FileTreeExtension_' .. key .. ' ctermfg=white guifg=#' .. val)
 	end
 end
 
-function FileTree.ChangeRoot(node)
-	local pathInfo
-
-    if node.pathInfo.isDirectory then
-        pathInfo = node.pathInfo
+function filetree.change_root(node)
+	local path
+    if node.path_info.directory then
+        path = node.path_info
     else
-        pathInfo = node.parent.pathInfo
+        path = node.parent.path_info
     end
 
-	Path.ChangeCWD(pathInfo)
-
-	FileTreeInit()
-
-    FileTree.Render()
+	path.change_cwd(path)
+	init()
+    filetree.render()
 end
 
-function FileTree.Close()
-    if not FileTree.WinID then
-        return
-    end
+function filetree.close()
+	if (vim.api.nvim_win_is_valid(filetree.winid)) then
+		filetree.cursor = vim.api.nvim_win_get_cursor(filetree.winid)
+		vim.api.nvim_win_close(filetree.winid, true)
+	end
 
-	FileTree.Cursor = vim.api.nvim_win_get_cursor(FileTree.WinID)
-	vim.api.nvim_win_close(FileTree.WinID, true)
-	vim.api.nvim_buf_delete(FileTree.BufID, { force = true })
-	FileTree.WinID = nil
-	FileTree.BufID = nil
+	if vim.api.nvim_buf_is_valid(filetree.bufid) then
+		vim.api.nvim_buf_delete(filetree.bufid, { force = true })
+	end
+
+	filetree.winid = nil
+	filetree.bufid = nil
 end
 
-return FileTree
+return filetree

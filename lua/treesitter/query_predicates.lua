@@ -1,19 +1,15 @@
-local query = require"vim.treesitter.query"
-
-local function error(str)
-  vim.api.nvim_err_writeln(str)
-end
+local query = require('vim.treesitter.query')
 
 local function valid_args(name, pred, count, strict_count)
   local arg_count = #pred - 1
 
   if strict_count then
     if arg_count ~= count then
-      error(string.format("%s must have exactly %d arguments", name, count))
+      vim.api.nvim_err_writeln(string.format("%s must have exactly %d arguments", name, count))
       return false
     end
   elseif arg_count < count then
-    error(string.format("%s must have at least %d arguments", name, count))
+    vim.api.nvim_err_writeln(string.format("%s must have at least %d arguments", name, count))
     return false
   end
 

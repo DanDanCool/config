@@ -34,6 +34,7 @@ local plugin_map = {
 	filetree = 'TREE',
 	tagbar = 'tags',
 	fzf = 'fzf',
+	symbols = 'symbols',
 	qf = 'quickfix',
 }
 
@@ -142,7 +143,7 @@ end
 
 function statusline.statusline()
 	local statusline = mode() .. filename()
-	statusline = statusline .. '%=%#STLText#%#STLHighlight# Ln %l, Col %c %#STLText#  %L '
+	statusline = statusline .. '%=%#STLText#%#STLHighlight#Ln %l, Col %c %#STLText#  %L '
 
 	return statusline
 end
@@ -172,8 +173,8 @@ function statusline.tabline()
 		prev = tab
 	end
 
-	tabline = tabline .. '%#TabLineFill#'
-	tabline = tabline .. '%=' .. git.name() .. '  '
+	tabline = tabline .. '%#TabLineFill#' .. '%='
+	tabline = tabline .. git.name() .. '  '
 
 	return tabline
 end

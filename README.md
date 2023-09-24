@@ -1,12 +1,11 @@
 # config
-configuration for neovim, requires version 0.5
+configuration for neovim, requires version 0.9
+
+# Notes:
+- ctags deprecated, replaced with treesitter
 
 # TODO:
-- finish rewriting the nerdtree menu
-- refactor!!! (everything should be snake case to match the neovim style)
-- fix those errors from complete.lua
-- add the 'additional complete' items from the lsp into complete.lua
-- add fuzzy matching to complete.lua
+- finish lsp integration
 - proper credits
 
 # Credits:

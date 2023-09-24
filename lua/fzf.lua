@@ -35,6 +35,11 @@ function fzf.setup()
 end
 
 function fzf.create_win()
+	fzf.results.buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_option(fzf.results.buf, 'filetype', 'fzf')
+	fzf.prompt.buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_option(fzf.prompt.buf, 'filetype', 'fzf')
+
 	local opts = {
 		relative	= 'editor',
 		style		= 'minimal',
@@ -46,13 +51,12 @@ function fzf.create_win()
 	opts.width = vim.o.columns - opts.col * 2
 	opts.height = vim.o.lines - opts.row * 2 - 6
 
-	fzf.results.buf = vim.api.nvim_create_buf(false, true)
 	fzf.results.win = vim.api.nvim_open_win(fzf.results.buf, false, opts)
 
 	opts.row = vim.o.lines - math.ceil(vim.o.lines / 8) - 2
 	opts.height = 1
 
-	fzf.prompt.buf = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_keymap(fzf.prompt.buf, 'n', '<c-p>', '<nop>', { noremap = true, silent = true })
 	fzf.prompt.win = vim.api.nvim_open_win(fzf.prompt.buf, true, opts)
 	fzf.prompt.tick = vim.api.nvim_buf_get_changedtick(fzf.prompt.buf)
 
@@ -60,9 +64,13 @@ function fzf.create_win()
 	fzf.selected = ''
 
 	vim.wo.statusline = '%#STLText# fzf'
-	vim.bo.filetype = 'fzf'
 
-	vim.api.nvim_command('autocmd BufLeave <buffer> lua require("fzf").close()')
+	vim.api.nvim_create_autocmd({"BufLeave"}, {
+		callback = fzf.close,
+		buffer = fzf.prompt.buf,
+		once = true
+	})
+
 	vim.api.nvim_buf_set_option(fzf.prompt.buf, 'buftype', 'prompt')
 	vim.fn.prompt_setprompt(fzf.prompt.buf, '> ')
 	keymap.bind(fzf.prompt.buf)
@@ -115,6 +123,10 @@ function fzf.run()
 
 	local timer = vim.loop.new_timer()
 	timer:start(100, 50, vim.schedule_wrap(function()
+		if not vim.api.nvim_buf_is_valid(fzf.prompt.buf) then
+			return
+		end
+
 		local tick = vim.api.nvim_buf_get_changedtick(fzf.prompt.buf)
 		if tick ~= fzf.prompt.tick then
 			fzf.prompt.tick = tick
