@@ -57,18 +57,18 @@ function key_map.set_maps()
     key_map.create({ key = 'o', scope = 'DirNode', callback = tree_node.toggle_open_dir	})
 
     key_map.create({ key = 'o', scope = 'FileNode', callback = function(node)
-		opener.open(node, { reuse = 'all', where = 'p', keepopen = 1 })
 		filetree.close()
+		opener.open(node, { reuse = 'all', where = 'p', keepopen = 1 })
 	end	})
 
     key_map.create({ key = 'i', scope = 'FileNode', callback = function(node)
-		opener.open(node, { where = 'h', keepopen = 1 })
 		filetree.close()
+		opener.open(node, { where = 'h', keepopen = 1 })
 	end	})
 
     key_map.create({ key = 's', scope = 'FileNode', callback = function(node)
-		opener.open(node, { where = 'v', keepopen = 1 })
 		filetree.close()
+		opener.open(node, { where = 'v', keepopen = 1 })
 	end	})
 
     key_map.create({ key = 'O', scope = 'DirNode', callback = function(node)
@@ -97,13 +97,13 @@ function key_map.set_maps()
 	end	})
 
     key_map.create({ key = 't', scope = 'FileNode', callback = function(node)
-		opener.open(node, {where = 't', keepopen = 1})
 		filetree.close()
+		opener.open(node, {where = 't', keepopen = 1})
 	end	})
 
     key_map.create({ key = 'T', scope = 'FileNode', callback =  function(node)
-		opener.open(node, {where = 't', keepopen = 1, stay = 1})
 		filetree.close()
+		opener.open(node, {where = 't', keepopen = 1, stay = 1})
 	end	})
 
 	key_map.create({ key = 'n', scope = 'FileNode', callback = function(node)
