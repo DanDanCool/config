@@ -113,9 +113,9 @@ function key_map.set_maps()
 		if path:sub(#path, #path) == '/' then
 			vim.fn.mkdir(path, 'p')
 		else
+			filetree.close()
 			vim.api.nvim_command('wincmd p')
 			vim.api.nvim_command('edit ' .. path)
-			filetree.close()
 		end
 	end })
 
@@ -125,9 +125,9 @@ function key_map.set_maps()
 		if path:sub(#path, #path) == '/' then
 			vim.fn.mkdir(path, 'p')
 		else
+			filetree.close()
 			vim.api.nvim_command('wincmd p')
 			vim.api.nvim_command('edit ' .. path)
-			filetree.close()
 		end
 	end })
 end
