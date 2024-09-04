@@ -29,6 +29,7 @@ vim.opt.modeline = false
 vim.opt.shada = ''
 
 vim.g.TransparentBackground = 1
+vim.g.loaded_python3_provider = 0
 vim.api.nvim_command('colo nord')
 
 local map_opt = { noremap = true, silent = true }

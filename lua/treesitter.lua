@@ -63,6 +63,20 @@ local function keymap()
 	})
 end
 
+local function highlight_link()
+	vim.api.nvim_command('hi link @include Include')
+	vim.api.nvim_command('hi link @method Function')
+	vim.api.nvim_command('hi link @parameter Identifier')
+	vim.api.nvim_command('hi link @field Identifier')
+	vim.api.nvim_command('hi link @spell Comment')
+	vim.api.nvim_command('hi link @conditional Conditional')
+	vim.api.nvim_command('hi link @none Normal')
+	vim.api.nvim_command('hi link @repeat Repeat')
+	vim.api.nvim_command('hi link @error Error')
+	vim.api.nvim_command('hi link @float Float')
+	vim.api.nvim_command('hi link @exception Error')
+end
+
 function treesitter.create_window()
 	treesitter.analyze.win = vim.api.nvim_get_current_win()
 
@@ -130,6 +144,7 @@ end
 
 function treesitter.setup()
 	local groupid = vim.api.nvim_create_augroup("ts_highlight", {})
+	highlight_link()
 	vim.api.nvim_create_autocmd({"FileType"}, {
 		group = groupid,
 		callback = function(args)

@@ -10,9 +10,12 @@ vim.g.colors_name = "nord"
 
 local NordColors = {}
 
-NordColors.Normal	= {fg = "white", guifg = "#D8DEE9"}
+NordColors.Normal	= {fg = "white", guifg = "#D8DEE9", guibg="NONE", bg="NONE"}
+NordColors.NormalFloat	= {fg = "white", guifg = "#D8DEE9", guibg="NONE", bg="NONE"}
+NordColors.FloatBorder	= {fg = "white", guifg = "#2E3440", guibg="NONE", bg="NONE"}
 NordColors.Conceal	= {fg = "white", guifg = "#D8DEE9", bg = "NONE", guibg = "NONE"}
 NordColors.VertSplit = {cterm = "NONE", fg = "38", bg = "NONE", gui = "NONE", guifg = "#2E3440", guibg = "NONE"}
+NordColors.WinSeparator = {cterm = "NONE", fg = "38", bg = "NONE", gui = "NONE", guifg = "#2E3440", guibg = "NONE"}
 
 --NordColors.Normal	= {"fg": "white", "bg": "black", "guifg": "#E5E9F0", "guibg": "#1c1f26"}
 --NordColors.VertSplit = {"fg": "38", "bg": "38", "guifg": "#1c1f26", "guibg": "#2E3440"}
@@ -51,10 +54,16 @@ NordColors.Todo			= {fg = "white", bg = "28", guifg = "#D8DEE9", guibg = "#434C5
 -- Misc
 NordColors.Folded		= {fg = "white", bg = "54", guifg = "#D8DEE9", guibg = "#3B4252"}
 NordColors.Visual		= {bg = "242", guibg = "#3B4252"}
-NordColors.Search		= {fg = "white", bg = "242", guifg = "#D8DEE9", guibg = "#B48EAD"}
+NordColors.Search		= {bg = "242", guifg = "#D8DEE9", guibg = "#B48EAD"}
+NordColors.CurSearch	= {bg = "242", guifg = "#D8DEE9", guibg = "#71468c"}
 NordColors.LineNr		= {fg =  "38", guifg = "#2E3440"}
 NordColors.Pmenu		= {fg = "white", bg = "92", guifg = "#E5E9F0", guibg = "#434C5E"}
 NordColors.PmenuSel		= {fg = "white", bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
+NordColors.CursorColumn		= {bg = "92", guifg = "#E5E9F0", guibg = "#434C5E"}
+NordColors.CursorLine		= {bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
+NordColors.ColorColumn		= {bg = "92", guifg = "#E5E9F0", guibg = "#434C5E"}
+NordColors.FloatShadow		= {fg = "white", bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
+NordColors.FloatShadowThrough		= {fg = "white", bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
 
 NordColors.StatusLine	= {fg = "233", guifg = "#2E3440", guibg = "#2E3440"}
 NordColors.StatusLineNC	= {fg = "233", guifg = "#2E3440", guibg = "#2E3440"}
@@ -87,6 +96,10 @@ local function highlight(group, def)
 	if colors["cterm"] then
 		cmd = cmd .. 'gui=' .. colors["gui"] .. ' '
 		cmd = cmd .. 'cterm=' .. colors["cterm"] .. ' '
+	end
+
+	if colors["guisp"] then
+		cmd = cmd .. 'guisp=' .. colors['guisp'] .. ' '
 	end
 
 	vim.api.nvim_command(cmd)

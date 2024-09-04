@@ -51,9 +51,9 @@ local function has_ancestor(match, pattern, bufnr, pred)
   return false
 end
 
-query.add_predicate('has-ancestor?', has_ancestor)
+query.add_predicate('has-ancestor?', has_ancestor, {force=true})
 
-query.add_predicate('has-parent?', has_ancestor)
+query.add_predicate('has-parent?', has_ancestor, {force=true})
 
 query.add_predicate('has-type?', function(match, pattern, bufnr, pred)
   if not valid_args(pred[1], pred, 2) then return end

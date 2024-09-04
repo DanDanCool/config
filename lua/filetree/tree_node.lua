@@ -171,7 +171,7 @@ function tree_node.highlight_tree()
 			vim.api.nvim_buf_add_highlight(filetree.bufid, filetree.hlid, 'FileTreeDir', node.ln - 1, node.depth * 2 + 4, node.depth * 2 + 6)
 			vim.api.nvim_buf_add_highlight(filetree.bufid, filetree.hlid, 'FileTreeNodeDir', node.ln - 1, node.depth * 2 + 6, -1)
 		else
-			vim.api.nvim_buf_add_highlight(filetree.bufid, filetree.hlid, filetree.config.extension_groups[node.path_info.path], node.ln - 1, node.depth * 2 + 2, node.depth * 2 + 4)
+			vim.api.nvim_buf_add_highlight(filetree.bufid, filetree.hlid, filetree.config.extension_groups[node.path_info.path], node.ln - 1, node.depth * 2, node.depth * 2 + 4)
 		end
 	end
 end
