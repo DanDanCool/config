@@ -66,15 +66,19 @@ end
 local function highlight_link()
 	vim.api.nvim_command('hi link @include Include')
 	vim.api.nvim_command('hi link @method Function')
+	vim.api.nvim_command('hi link @function Function')
 	vim.api.nvim_command('hi link @parameter Identifier')
 	vim.api.nvim_command('hi link @field Identifier')
 	vim.api.nvim_command('hi link @spell Comment')
 	vim.api.nvim_command('hi link @conditional Conditional')
 	vim.api.nvim_command('hi link @none Normal')
 	vim.api.nvim_command('hi link @repeat Repeat')
-	vim.api.nvim_command('hi link @error Error')
+	vim.api.nvim_command('hi link @error Normal') -- this is annoying
 	vim.api.nvim_command('hi link @float Float')
-	vim.api.nvim_command('hi link @exception Error')
+	vim.api.nvim_command('hi link @exception Exception')
+	vim.api.nvim_command('hi link @define PreProc')
+	vim.api.nvim_command('hi link @storageclass StorageClass')
+	vim.api.nvim_command('hi link @namespace TSNamespace')
 end
 
 function treesitter.create_window()

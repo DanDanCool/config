@@ -40,6 +40,7 @@ NordColors.Label		= {fg = "98", guifg = "#81A1C1"}
 NordColors.Operator		= {fg = "white", guifg = "#5E81AC"}
 NordColors.Delimiter	= {fg = "white", guifg = "#D8DEE9"}
 NordColors.Exception	= {fg = "98", guifg = "#88C0D0"}
+NordColors.Error	= {bg = "98", guibg = "#bf616a"}
 
 NordColors.PreProc		= {fg =  "92", guifg = "#899bbf"}
 NordColors.Include		= {fg = "245", guifg = "#899bbf"}
@@ -56,7 +57,7 @@ NordColors.Folded		= {fg = "white", bg = "54", guifg = "#D8DEE9", guibg = "#3B42
 NordColors.Visual		= {bg = "242", guibg = "#3B4252"}
 NordColors.Search		= {bg = "242", guifg = "#D8DEE9", guibg = "#B48EAD"}
 NordColors.CurSearch	= {bg = "242", guifg = "#D8DEE9", guibg = "#71468c"}
-NordColors.LineNr		= {fg =  "38", guifg = "#2E3440"}
+NordColors.LineNr		= {fg =  "38", guifg = "#8fbcbb"}
 NordColors.Pmenu		= {fg = "white", bg = "92", guifg = "#E5E9F0", guibg = "#434C5E"}
 NordColors.PmenuSel		= {fg = "white", bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
 NordColors.CursorColumn		= {bg = "92", guifg = "#E5E9F0", guibg = "#434C5E"}
@@ -64,6 +65,7 @@ NordColors.CursorLine		= {bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
 NordColors.ColorColumn		= {bg = "92", guifg = "#E5E9F0", guibg = "#434C5E"}
 NordColors.FloatShadow		= {fg = "white", bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
 NordColors.FloatShadowThrough		= {fg = "white", bg = "62", guifg = "#E5E9F0", guibg = "#2E3440"}
+NordColors.MatchParen		= {bg = "62", guifg = "#E5E9F0", guibg = "#8fbcbb"}
 
 NordColors.StatusLine	= {fg = "233", guifg = "#2E3440", guibg = "#2E3440"}
 NordColors.StatusLineNC	= {fg = "233", guifg = "#2E3440", guibg = "#2E3440"}

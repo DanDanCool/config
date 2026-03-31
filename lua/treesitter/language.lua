@@ -5,7 +5,9 @@ local langs = {
 	cpp = true,
 	lua = true,
 	python = true,
-	java = false
+	java = true,
+	go = true,
+	javascript = true,
 }
 
 function language.supported(lang)
